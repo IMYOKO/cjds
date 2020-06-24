@@ -1,32 +1,32 @@
 import Vue from 'vue';
-import {post,fetch,patch,put,del,upload,ret2} from './http'
-Vue.prototype.$post=post;
-Vue.prototype.$fetch=fetch;
-Vue.prototype.$patch=patch;
-Vue.prototype.$put=put;
-Vue.prototype.$del=del;
+import { post, fetch, patch, put, del, upload, ret2 } from './http'
+Vue.prototype.$post = post;
+Vue.prototype.$fetch = fetch;
+Vue.prototype.$patch = patch;
+Vue.prototype.$put = put;
+Vue.prototype.$del = del;
 
 //APIURL--测试
-const _baseUrl='http://58.84.7.20:8081/api/';
-const _imgUrl='http://api.twnongchang.cn/';
+const _baseUrl = 'http://58.84.7.20:8081/api/';
+const _imgUrl = 'http://api.twnongchang.cn/';
 
 // const _baseUrl='http://api.twnongchang.com/CTLAllAPI/';
 // const _imgUrl='http://api.twnongchang.com/';
 
 //返回路径
-export const imgUrl = function() {
+export const imgUrl = function () {
     return _imgUrl;
 };
 //返回路径
-export const baseUrl = function() {
+export const baseUrl = function () {
     return 'http://58.84.7.20:8081/vedio/';
 };
 
 //登录方法 -1
 // Username：用户名
 // Password：密码
-export const loginApi = function(json) {
-    return Vue.prototype.$post(_baseUrl+'AppLogin',json,true)
+export const loginApi = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'AppLogin', json, true)
 };
 
 // GetGameTable（获取游戏桌信息）-1
@@ -41,8 +41,8 @@ export const loginApi = function(json) {
 // List（游戏记录集合 20个数组）
 // Num：开奖号码
 // DS：单双类型
-export const GetGameTable = function() {
-    return Vue.prototype.$post(_baseUrl+'GetGameTable')
+export const GetGameTable = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetGameTable')
 };
 
 // Withdrawal(提现信息) -1
@@ -51,8 +51,8 @@ export const GetGameTable = function() {
 // WithdrawalLS：所需流水
 // TXZMoney：提现中金额
 // YTXMoney：已提现金额
-export const Withdrawal = function() {
-    return Vue.prototype.$post(_baseUrl+'Withdrawal')
+export const Withdrawal = function () {
+    return Vue.prototype.$post(_baseUrl + 'Withdrawal')
 };
 
 // AddWithdrawal（提交提现） -1
@@ -63,8 +63,8 @@ export const Withdrawal = function() {
 // Bankno：银行号码
 // Money：提现金额
 // Tkmm：提款密码
-export const AddWithdrawal = function(json) {
-    return Vue.prototype.$post(_baseUrl+'AddWithdrawal',json)
+export const AddWithdrawal = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'AddWithdrawal', json)
 };
 
 // AddRecharge（充值接口） -1
@@ -74,44 +74,44 @@ export const AddWithdrawal = function(json) {
 // BankFS：汇款方式（Type等于1的时候传值，不为1传个空字符过来）
 // Type：充值类型1银行卡 2支付宝 3微信
 // Money：充值金额
-export const AddRecharge = function(json) {
-    return Vue.prototype.$post(_baseUrl+'AddRecharge',json)
+export const AddRecharge = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'AddRecharge', json)
 };
 
 // UpdatePassWord（修改密码）-1
 // Password：旧密码
 // Newpassword：新密码
-export const UpdatePassWord = function(json) {
-    return Vue.prototype.$post(_baseUrl+'UpdatePassWord',json)
+export const UpdatePassWord = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'UpdatePassWord', json)
 };
 
 // UpdateTKPassWord（修改提款密码） -1
 // Password：旧密码
 // Newpassword：新密码
-export const UpdateTKPassWord = function(json) {
-    return Vue.prototype.$post(_baseUrl+'UpdateTKPassWord',json)
+export const UpdateTKPassWord = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'UpdateTKPassWord', json)
 };
 
 // GetVedio（获取视频列表）
 // List
 // FileName：文件名
 // Ss:视频时长
-export const GetVedio = function() {
-    return Vue.prototype.$post(_baseUrl+'GetVedio','','','',true)
+export const GetVedio = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetVedio', '', '', '', true)
 };
 
 // GetVedioTime（获取视频时间参数）
 // DSTime：当前播放进度
 // XZTime：距离下注时间 -- 下注时间
-export const GetVedioTime = function() {
-    return Vue.prototype.$post(_baseUrl+'GetVedioTime','','','',true)
+export const GetVedioTime = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetVedioTime', '', '', '', true)
 };
 
 // AddVedio（切换视频请求我）
 // 参数：
 // VideoName：下个视频名
-export const AddVedio = function(json) {
-    return Vue.prototype.$post(_baseUrl+'AddVedio',json,'','',true)
+export const AddVedio = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'AddVedio', json, '', '', true)
 };
 
 // AddOrder（下注）-1
@@ -119,8 +119,8 @@ export const AddVedio = function(json) {
 // GameTableId：游戏桌台Id
 // PlayType：玩法  （ 1:2|金额,2:2|金额，2:6|金额...这样格式。）
 // Money：下注金额 （上面玩法里的总金额）
-export const AddOrder = function(json) {
-    return Vue.prototype.$post(_baseUrl+'AddOrder',json)
+export const AddOrder = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'AddOrder', json)
 };
 
 // GetOrder(获取游戏记录) -1
@@ -137,8 +137,8 @@ export const AddOrder = function(json) {
 // XZMoney：下注金额
 // SY：输赢
 // Uid：用户id，这个不用展示，我也返回了而已
-export const GetOrder = function(json) {
-    return Vue.prototype.$post(_baseUrl+'GetOrder',json)
+export const GetOrder = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'GetOrder', json)
 };
 
 // GetRecharge(获取充值记录) -1
@@ -157,8 +157,8 @@ export const GetOrder = function(json) {
 // RBankName：汇款银行
 // RBankFS：汇款方式
 // UserName：用户名
-export const GetRecharge = function(json) {
-  return Vue.prototype.$post(_baseUrl+'GetRecharge',json)
+export const GetRecharge = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'GetRecharge', json)
 };
 
 // GetWithdrawal（获取提现记录) -1
@@ -175,8 +175,8 @@ export const GetRecharge = function(json) {
 // BankUserName：银行账户名
 // BankZHInfo：支行信息
 // BankNo：银行卡号
-export const GetWithdrawal = function(json) {
-  return Vue.prototype.$post(_baseUrl+'GetWithdrawal',json)
+export const GetWithdrawal = function (json) {
+    return Vue.prototype.$post(_baseUrl + 'GetWithdrawal', json)
 };
 
 
@@ -185,23 +185,28 @@ export const GetWithdrawal = function(json) {
 // Num:排名
 // NickName：昵称
 // YL：盈利
-export const GetPM = function() {
-    return Vue.prototype.$post(_baseUrl+'GetPM')
+export const GetPM = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetPM')
 };
 
 // GetGG：获取公告 -1
-export const GetGG = function() {
-    return Vue.prototype.$post(_baseUrl+'GetGG')
+export const GetGG = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetGG')
 };
 
 // QSJ：-1
-export const QSJ = function() {
-    return Vue.prototype.$post(_baseUrl+'QSJ','','','',true)
+export const QSJ = function () {
+    return Vue.prototype.$post(_baseUrl + 'QSJ', '', '', '', true)
 };
 
 // GetKJ：-1
-export const GetKJ = function() {
-    return Vue.prototype.$post(_baseUrl+'GetKJ','','','',true)
+export const GetKJ = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetKJ', '', '', '', true)
+};
+
+// GetBankInfo 获取银行卡信息
+export const GetBankInfo = function () {
+    return Vue.prototype.$post(_baseUrl + 'GetBankInfo')
 };
 
 

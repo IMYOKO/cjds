@@ -501,7 +501,8 @@ import {
   baseUrl,
   AddVedio,
   QSJ,
-  GetKJ
+  GetKJ,
+  GetBankInfo
 } from "../common/api";
 import { Toast, Loadmore, Switch } from "mint-ui";
 import Cookies from "js-cookie";
