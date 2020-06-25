@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="clear_bor">
-    <div class="ds-nav-left" v-if="!(urlPath==='/login')">
+    <div class="ds-nav-left" v-if="!(urlPath==='/login' || urlPath==='/register')">
       <div class="contener-box">
         <img src="../static/ds/index_03.jpg" alt="">
         <div class="contener-box clear_box">
@@ -42,8 +42,11 @@
         </div>
       </div>
     </div>
-    <div :class="(urlPath==='/login')?'':'ds-nav-right'">
-      <div class="contener-box ds-header-top clear_box" v-if="!(urlPath==='/login')">
+    <div :class="(urlPath==='/login' || urlPath==='/register')?'':'ds-nav-right'">
+      <div
+        class="contener-box ds-header-top clear_box"
+        v-if="!(urlPath==='/login'|| urlPath==='/register')"
+      >
         <div class="ds-news-box float_left">
           <div class="ds-news-cont">
             <gd></gd>
@@ -52,7 +55,7 @@
         <div class="float_right">
           <ul class="ds-right-nav-icon">
             <li class="ds-right-nav-icon-get ds-icon-top-1"></li>
-            <li class="ds-right-nav-icon-get ds-icon-top-2"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-2" title="会员消息" @click="showtVipMessage"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-3" title="电话"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-4" @click="toshowhistory" title="历史记录"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-5" @click="toshowhelp" title="简介"></li>
@@ -92,6 +95,7 @@
       ></withdrawal>
       <!--history-->
       <history @historyShow="toshowhistory" :historyShow="historyShows" :historyArr="hArr"></history>
+      <VipMessage ref="vipMessage"/>
     </div>
   </div>
 </template>
@@ -103,6 +107,7 @@ import about from "@/components/about";
 import popularize from "@/components/popularize";
 import withdrawal from "@/components/withdrawal";
 import history from "@/components/history";
+import VipMessage from "@/components/vip-message";
 import { Toast, Actionsheet, Loadmore } from "mint-ui";
 import { Withdrawal, GetOrder, GetGG } from "./common/api";
 import Cookies from "js-cookie";
@@ -114,7 +119,8 @@ export default {
     popularize,
     about,
     withdrawal,
-    history
+    history,
+    VipMessage
   },
   data() {
     return {
@@ -245,13 +251,19 @@ export default {
       });
     },
     loginSat: function() {
-      var token = Cookies.get("token");
+      if (this.$route.path === "/register") {
+        return;
+      }
+      const token = Cookies.get("token");
       if (!token || token == "null" || token == "undefined") {
         this.$router.push({ path: "/login" });
       }
     },
     toIndex() {
       this.$router.push("/");
+    },
+    showtVipMessage() {
+      this.$refs.vipMessage.updateModal(true);
     }
   },
   mounted() {},

@@ -209,6 +209,44 @@ export const GetBankInfo = function () {
     return Vue.prototype.$post(_baseUrl + 'GetBankInfo')
 };
 
+/**
+ * Register 注册
+ * @param {Phone} 手机号 
+ * @param {UserName} 账户 
+ * @param {PassWord} 密码 
+ * @param {YQM} 邀请码
+ * @param {SMSCode} 验证码
+ */
+export const Register = (data) => {
+    return Vue.prototype.$post(_baseUrl + 'Register', data)
+};
+
+/**
+ * Register 获取验证码
+ * @param {Phone} 手机号 
+ */
+export const GetSMS = (data) => {
+    return Vue.prototype.$post(_baseUrl + 'GetSMS', data)
+};
+
+/**
+ * GetZNX 获取小喇叭通知
+ */
+export const GetZNX = () => {
+    return Vue.prototype.$post(_baseUrl + 'GetZNX')
+};
+
+/**
+ * GetXZTime 获取下注倒计时
+ * @returns {UserName}
+ * @returns {MContent}
+ * @returns {AddTime}
+ * UserName
+ */
+export const GetXZTime = () => {
+    return Vue.prototype.$post(_baseUrl + 'GetXZTime')
+};
+
 
 
 

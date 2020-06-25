@@ -82,7 +82,7 @@
           </td>
           <td width="680" valign="top">
             <div class="ds-game-title clear_box">
-              <span style="float: left; padding-left: 15px; font-size: 20px;">
+              <span class="xzTime" style="float: left;">
                 {{
                 kjdjs
                 }}
@@ -502,7 +502,9 @@ import {
   AddVedio,
   QSJ,
   GetKJ,
-  GetBankInfo
+  GetBankInfo,
+  GetZNX,
+  GetXZTime
 } from "../common/api";
 import { Toast, Loadmore, Switch } from "mint-ui";
 import Cookies from "js-cookie";
@@ -565,7 +567,8 @@ export default {
       kjdjs: 0,
       XzISOk: false,
       kjstatus: false,
-      isAllin: false
+      isAllin: false,
+      xzTime: 0
     };
   },
   created() {
@@ -579,6 +582,14 @@ export default {
     }
   },
   methods: {
+    async GetXZTime() {
+      try {
+        const { Data = 0 } = await GetXZTime();
+        this.xzTime = Number(Data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     getGetGameTable() {
       GetGameTable().then(res => {
         console.log(res);
@@ -715,26 +726,35 @@ export default {
                   this.grdz,
                   this.xzlimt.IndividualToChildRestriction
                 );
-                console.log(this.grxz, this.grtm, this.grdz);
-                console.log(isOverGrxz, isOverGrtm, isOverGrdz);
-                if (isOverGrxz > -1) {
-                  Toast(
-                    `下注金额${isOverGrxz > 0 ? "大于" : "小于"}个人限注！`
-                  );
-                  return;
+                if (this.grdz > 0) {
+                  if (isOverGrdz > -1) {
+                    Toast(
+                      `下注金额${
+                        isOverGrdz > 0 ? "大于" : "小于"
+                      }个人对子限注！`
+                    );
+                    return;
+                  }
                 }
-                if (isOverGrtm > -1) {
-                  Toast(
-                    `下注金额${isOverGrtm > 0 ? "大于" : "小于"}个人特码限注！`
-                  );
-                  return;
+                if (this.grtm > 0) {
+                  if (isOverGrtm > -1) {
+                    Toast(
+                      `下注金额${
+                        isOverGrtm > 0 ? "大于" : "小于"
+                      }个人特码限注！`
+                    );
+                    return;
+                  }
                 }
-                if (isOverGrdz > -1) {
-                  Toast(
-                    `下注金额${isOverGrdz > 0 ? "大于" : "小于"}个人对子限注！`
-                  );
-                  return;
+                if (this.grxz > 0) {
+                  if (isOverGrxz > -1) {
+                    Toast(
+                      `下注金额${isOverGrxz > 0 ? "大于" : "小于"}个人限注！`
+                    );
+                    return;
+                  }
                 }
+
                 var getJson = {
                   GameTableId: that.id,
                   PlayType: tempGetJson,
@@ -889,14 +909,14 @@ export default {
     countDown(time) {
       let that = this;
       if (that.kjdjs == 0 && !that.XzISOk) {
-        if (time > that.XZTime && time < that.XZTime + 30) {
-          that.kjdjs = 30 - that.XZTime;
+        if (time > that.XZTime && time < that.XZTime + this.xzTime) {
+          that.kjdjs = this.xzTime - that.XZTime;
           that.XzISOk = true;
-        } else if (time > that.XZTime && time > that.XZTime + 30) {
+        } else if (time > that.XZTime && time > that.XZTime + this.xzTime) {
           that.kjdjs = 1;
           that.XzISOk = false;
         } else {
-          that.kjdjs = 30;
+          that.kjdjs = this.xzTime;
           that.XzISOk = true;
         }
         var interval = setInterval(() => {
@@ -915,6 +935,7 @@ export default {
     }
   },
   mounted() {
+    this.GetXZTime();
     var that = this;
     //      that.countDown();
     setInterval(function() {
@@ -978,5 +999,18 @@ export default {
   &:hover {
     box-shadow: 0 4px 5px rgba(255, 255, 0, 0.5);
   }
+}
+.xzTime {
+  color: #bf0e0b;
+  font-size: 28px;
+  font-weight: bold;
+  display: block;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 20px;
+  background-color: #fdfd76;
+  margin: 8px 0 0 10px;
 }
 </style>

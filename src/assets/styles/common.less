@@ -1,0 +1,43 @@
+.pop-up-window {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+
+  &-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 730px;
+    height: 406px;
+    background-color: #161616;
+    transform: translate(-50%, -50%);
+
+    .pop-up-header {
+      color: #fff;
+      height: 46px;
+      line-height: 46px;
+      background-color: #1f110e;
+      position: relative;
+
+      p {
+        margin: 0;
+        padding: 0 20px;
+      }
+
+      .closed-btn {
+        position: absolute;
+        right: 20px;
+        top: 0;
+        height: 46px;
+        padding-left: 20px;
+        font-size: 16px;
+        background: url('../../../static/ds/left_icon.jpg') center center no-repeat;
+        background-position: 0;
+        cursor: pointer;
+      }
+    }
+  }
+}
