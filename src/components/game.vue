@@ -73,6 +73,7 @@
                 v-if="vdata.FileName == videoName"
                 :src="baseUrl + vdata.FileName"
                 id="videoPlay"
+                :key="vindex"
                 v-show="true"
                 muted
                 class="video"
@@ -96,9 +97,10 @@
             <div class="contener-box ds-game-cont">
               <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td v-for="(itemlist, index) in kj_data">
+                  <td v-for="(itemlist, index) in kj_data" :key='index'>
                     <div
                       v-if="itemlist.num[0]"
+                      :key='`${kjindex}s`'
                       v-for="(kjlist, kjindex) in itemlist.num"
                       :class="kjindex >= 6 ? 'ds-index-kj-po clear_bor' : ''"
                       :style="
@@ -121,8 +123,9 @@
                     <div
                       v-if="itemlist.num[0] && itemlist.num.length < 6"
                       v-for="nonelist in Math.abs(6 - itemlist.num.length)"
+                      :key="`${nonelist}1`"
                     ></div>
-                    <div v-if="!itemlist.num[0]" v-for="nonelist in 6"></div>
+                    <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}0`"></div>
                   </td>
                 </tr>
               </table>
@@ -602,7 +605,9 @@ export default {
               tempList.push(res.Data.List[i]);
             }
           }
-          console.log(tempList);
+          tempList.map(({num}) => {
+            num = this.$_.reverse(num)
+          })
           this.kj_data = tempList;
           this.kj_top_info = res.Data.GameTableList;
           if (this.kj_top_info.length > 0) {
@@ -907,26 +912,25 @@ export default {
       console.log(this.gameInfo);
     },
     countDown(time) {
-      let that = this;
-      if (that.kjdjs == 0 && !that.XzISOk) {
-        if (time > that.XZTime && time < that.XZTime + this.xzTime) {
-          that.kjdjs = this.xzTime - that.XZTime;
-          that.XzISOk = true;
-        } else if (time > that.XZTime && time > that.XZTime + this.xzTime) {
-          that.kjdjs = 1;
-          that.XzISOk = false;
+      if (this.kjdjs == 0 && !this.XzISOk) {
+        if (time > this.XZTime && time < this.XZTime + this.xzTime) {
+          this.kjdjs = this.xzTime - this.XZTime;
+          this.XzISOk = true;
+        } else if (time > this.XZTime && time > this.XZTime + this.xzTime) {
+          this.kjdjs = 1;
+          this.XzISOk = false;
         } else {
-          that.kjdjs = this.xzTime;
-          that.XzISOk = true;
+          this.kjdjs = this.xzTime;
+          this.XzISOk = true;
         }
         var interval = setInterval(() => {
-          if (that.XzISOk) {
-            --that.kjdjs;
-            that.XzISOk = true;
-            if (that.kjdjs == 0) {
-              that.kjdjs = 0;
-              that.XzISOk = false;
-              that.AddVedio(that.videoName);
+          if (this.XzISOk) {
+            --this.kjdjs;
+            this.XzISOk = true;
+            if (this.kjdjs == 0) {
+              this.kjdjs = 0;
+              this.XzISOk = false;
+              this.AddVedio(this.videoName);
               clearInterval(interval);
             }
           }
@@ -936,26 +940,27 @@ export default {
   },
   mounted() {
     this.GetXZTime();
-    var that = this;
-    //      that.countDown();
-    setInterval(function() {
-      var vdos = document.getElementById("videoPlay");
-      if (that.$route.path == "/game") {
-        if (
-          that.XZTime == parseInt(vdos.currentTime) ||
-          that.XZTime < parseInt(vdos.currentTime)
-        ) {
-          // console.log(that.XZTime,parseInt(vdos.currentTime),that.XzISOk)
-          that.countDown(parseInt(vdos.currentTime));
-          if (!that.kjstatus) {
-            GetKJ().then(res => {});
-            that.kjstatus = true;
+    //      this.countDown();
+    this.$nextTick(()=>{
+      setInterval(() => {
+        var vdos = document.getElementById("videoPlay");
+        if (this.$route.path == "/game") {
+          if (
+            this.XZTime == parseInt(vdos.currentTime) ||
+            this.XZTime < parseInt(vdos.currentTime)
+          ) {
+            // console.log(this.XZTime,parseInt(vdos.currentTime),this.XzISOk)
+            this.countDown(parseInt(vdos.currentTime));
+            if (!this.kjstatus) {
+              GetKJ().then(res => {});
+              this.kjstatus = true;
+            }
+          } else {
+            this.kjstatus = false;
           }
-        } else {
-          that.kjstatus = false;
         }
-      }
-    }, 1000);
+      }, 1000);
+    })
   }
 };
 </script>

@@ -9,6 +9,7 @@ import '../static/css/app.css'
 import VueScroller from 'vue-scroller'
 import Cookies from 'js-cookie'
 import ElementUI from 'element-ui';
+import lodash from 'lodash';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/styles/common.less';
 
@@ -17,6 +18,7 @@ Vue.use(ElementUI)
 Vue.use(VueScroller)
 Vue.use(Cookies)
 Vue.config.productionTip = false
+Vue.prototype.$_ = lodash
 new Vue(router)
 
 router.beforeEach((to, from, next) => {
