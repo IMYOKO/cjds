@@ -1,7 +1,7 @@
 <template>
 
   <div id="ds-vd-box" class="ds-vd-box" @click="playVideo">
-    <video :src="url" id="videoPlay" v-show="true" class="video" muted style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video>
+    <video :src="url" id="videoPlay" controlslist="nodownload" oncontextmenu="return false" v-show="true" class="video" muted style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video>
   </div>
 </template>
 <script>

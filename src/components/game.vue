@@ -67,12 +67,15 @@
             </table>
           </td>
           <td valign="top">
-            <div style="width: 100%; height: 372px;">
+            <div style="width: 100%; height: 372px; position: relative;">
+              <div class="hide-video" v-if="!value"></div>
               <video
                 v-for="(vdata, vindex) in videoList"
                 v-if="vdata.FileName == videoName"
                 :src="baseUrl + vdata.FileName"
                 id="videoPlay"
+                controlslist="nodownload"
+                oncontextmenu="return false"
                 :key="vindex"
                 v-show="true"
                 muted
@@ -441,7 +444,7 @@
       <div class="float_left ds-switch">
         <span>视频</span>
         <mt-switch v-model="value" @change="turn">开</mt-switch>
-        <span class="ds-sxsp">刷新视频</span>
+        <span class="ds-sxsp" v-if="value" @click="updateVideo">刷新视频</span>
       </div>
       <div class="float_right ds-code-game">
         <div
@@ -575,14 +578,16 @@ export default {
     };
   },
   created() {
-    var that = this;
-    that.baseUrl = baseUrl();
-    if (!that.id) {
-      that.$router.push("/");
+    this.baseUrl = baseUrl();
+    if (!this.id) {
+      this.$router.push("/");
     } else {
-      that.GetVedio(); //获取视频列表
-      that.getGetGameTable();
+      this.GetVedio(); //获取视频列表
+      this.getGetGameTable();
     }
+  },
+  mounted() {
+    this.GetXZTime();
   },
   methods: {
     async GetXZTime() {
@@ -592,6 +597,27 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    init() {
+      this.$nextTick(()=>{
+        setInterval(() => {
+          var vdos = document.getElementById("videoPlay");
+          if (this.$route.path == "/game") {
+            if (
+              this.XZTime == parseInt(vdos.currentTime) ||
+              this.XZTime < parseInt(vdos.currentTime)
+            ) {
+              this.countDown(parseInt(vdos.currentTime));
+              if (!this.kjstatus) {
+                GetKJ().then(res => {});
+                this.kjstatus = true;
+              }
+            } else {
+              this.kjstatus = false;
+            }
+          }
+        }, 1000);
+      })
     },
     getGetGameTable() {
       GetGameTable().then(res => {
@@ -824,51 +850,69 @@ export default {
       }
     },
     GetVedio() {
-      var thats = this;
       GetVedio().then(res => {
         if (res.Status && res.Code == 200) {
-          thats.videoList = res.Data;
-          thats.GetVedioTime();
+          this.videoList = res.Data;
+          this.init();
+          this.GetVedioTime();
         } else {
           Toast(res.Log);
         }
       });
     },
     AddVedio(vName) {
-      var that = this;
+      console.log({vName})
       if (vName) {
         var txtName = "";
-        for (var i = 0; i < that.videoList.length; i++) {
-          if (vName == that.videoList[i].FileName) {
-            if (i + 1 == that.videoList.length) {
+        for (var i = 0; i < this.videoList.length; i++) {
+          if (vName == this.videoList[i].FileName) {
+            if (i + 1 == this.videoList.length) {
               QSJ().then(res => {});
-              //                that.$router.push({path: '/game',query:{id:that.id}});
-              location.reload();
+              console.log('init')
+              // this.init()
+              // location.reload();
+              GetVedio().then(res => {
+                if (res.Status && res.Code == 200) {
+                  this.videoList = res.Data;
+                  if (this.videoList.length > 0) {
+                    txtName = this.videoList[0].FileName;
+                    if (txtName) {
+                      AddVedio({ VideoName: txtName }).then(res => {
+                        if (res.Status) {
+                          this.GetVedioTime();
+                          this.getGetGameTable();
+                        }
+                      });
+                    }
+                  }
+                } else {
+                  Toast(res.Log);
+                }
+              });
             } else {
-              txtName = that.videoList[i + 1].FileName;
+              txtName = this.videoList[i + 1].FileName;
             }
           }
         }
         if (txtName) {
           AddVedio({ VideoName: txtName }).then(res => {
             if (res.Status) {
-              that.GetVedioTime();
-              that.getGetGameTable();
+              this.GetVedioTime();
+              this.getGetGameTable();
             }
           });
         }
       }
     },
     GetVedioTime() {
-      var tx = this;
       GetVedioTime().then(res => {
         console.log(res);
         if (res.Status && res.Code == 200) {
-          tx.XZTime = res.Data.XZTime;
-          tx.DSTime = res.Data.DSTime;
-          tx.videoName = res.Data.DSVideo;
-          setTimeout(function() {
-            tx.playVideo();
+          this.XZTime = res.Data.XZTime;
+          this.DSTime = res.Data.DSTime;
+          this.videoName = res.Data.DSVideo;
+          setTimeout(() => {
+            this.playVideo();
           }, 1000);
         } else {
           Toast(res.Log);
@@ -890,7 +934,7 @@ export default {
       var myVideo = document.getElementById("videoPlay");
       myVideo.pause();
     },
-    turn: function() {
+    turn() {
       if (this.value) {
         this.playVideo();
       } else {
@@ -936,31 +980,18 @@ export default {
           }
         }, 1000);
       }
+    },
+    updateVideo() {
+      const video = document.getElementById("videoPlay");
+      if (video) {
+        const currentTime = video.currentTime
+        video.pause();
+        video.setAttribute('src', this.baseUrl + this.videoName);
+        video.load();
+        video.currentTime = currentTime;
+        video.play();
+      }
     }
-  },
-  mounted() {
-    this.GetXZTime();
-    //      this.countDown();
-    this.$nextTick(()=>{
-      setInterval(() => {
-        var vdos = document.getElementById("videoPlay");
-        if (this.$route.path == "/game") {
-          if (
-            this.XZTime == parseInt(vdos.currentTime) ||
-            this.XZTime < parseInt(vdos.currentTime)
-          ) {
-            // console.log(this.XZTime,parseInt(vdos.currentTime),this.XzISOk)
-            this.countDown(parseInt(vdos.currentTime));
-            if (!this.kjstatus) {
-              GetKJ().then(res => {});
-              this.kjstatus = true;
-            }
-          } else {
-            this.kjstatus = false;
-          }
-        }
-      }, 1000);
-    })
   }
 };
 </script>
@@ -979,6 +1010,15 @@ export default {
 }
 .ds-game-bg-z-bg {
   position: relative;
+}
+.hide-video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 10;
 }
 .ds-game-bg-z-bg > div {
   position: absolute;

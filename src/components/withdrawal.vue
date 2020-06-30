@@ -134,19 +134,19 @@
               <td>{{bankInfo.BankName}}</td>
             </tr>
             <tr>
-              <td>银行卡号：</td>
-              <td>
-                {{bankInfo.BankNo}}
-                <button class="clipboard" :data-clipboard-text="copyValue">复制</button>
-              </td>
+              <td>开户支行：</td>
+              <td>{{bankInfo.BankZH}}</td>
             </tr>
             <tr>
               <td>开户姓名：</td>
               <td>{{bankInfo.BankUserName}}</td>
             </tr>
             <tr>
-              <td>开户支行：</td>
-              <td>{{bankInfo.BankZH}}</td>
+              <td>银行卡号：</td>
+              <td>
+                {{bankInfo.BankNo}}
+                <button class="clipboard" :data-clipboard-text="copyValue">复制</button>
+              </td>
             </tr>
           </table>
         </div>

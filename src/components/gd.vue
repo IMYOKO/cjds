@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" :title="text">
     <div id="box">
       <div id="marquee">{{text}}</div>
       <div id="copy"></div>
