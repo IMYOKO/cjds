@@ -54,7 +54,7 @@
         </div>
         <div class="float_right">
           <ul class="ds-right-nav-icon">
-            <li class="ds-right-nav-icon-get ds-icon-top-1"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-1" title="声音" @click="setSound"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-2" title="会员消息" @click="showtVipMessage"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-3" title="电话"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-4" @click="toshowhistory" title="历史记录"></li>
@@ -70,7 +70,7 @@
               title="修改密码"
             ></li>
             <li class="ds-right-nav-icon-get ds-icon-top-8" @click="changePshow" title="推广"></li>
-            <li class="ds-right-nav-icon-get ds-icon-top-9" @click="getlogout" title="退出登录"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-9" @click="toIndex" title="返回大厅"></li>
           </ul>
         </div>
       </div>
@@ -135,7 +135,8 @@ export default {
       hArr: [],
       wShow: false,
       wTypea: "",
-      infoWithdrawal: []
+      infoWithdrawal: [],
+      sound: true
     };
   },
   created() {
@@ -144,6 +145,9 @@ export default {
     this.getWithdrawal(false);
   },
   methods: {
+    setSound() {
+      this.sound = !this.sound;
+    },
     getlogout: function() {
       //退出登录
       Cookies.set("token", "");

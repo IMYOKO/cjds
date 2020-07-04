@@ -16,15 +16,15 @@
               <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td v-for="(itemlist,index) in kj_data" :key="index">
-                    <div v-if="itemlist.num[0]" v-for='(kjlist,kjindex) in itemlist.num'
+                    <div v-if="itemlist.num[0]" v-for="(kjlist,kjindex) in itemlist.num"
                          :class="kjindex>=6?'ds-index-kj-po clear_bor':''"
                          :style="kjindex>=6?'left:'+(leftPo*(itemlist.num.length-kjindex))+'px':''"
-                         :key="index"
+                         :key="`${kjindex}kjindex`"
                     >
                       <span v-if="kjindex<6" :class="itemlist.DS?'bg-bf0d0b':'bg-0544b8'">{{kjlist}}</span>
                       <span v-if="kjindex>=6" :class="itemlist.DS?'bg-bf0d0b':'bg-0544b8'">{{kjlist}}</span>
                     </div>
-                    <div v-if="itemlist.num[0] && itemlist.num.length<6" v-for="nonelist in Math.abs(6-itemlist.num.length)" :key="`${nonelist}`"></div>
+                    <div v-if="itemlist.num[0] && itemlist.num.length<6" v-for="nonelist in Math.abs(6-itemlist.num.length)" :key="`${nonelist}nonelist`"></div>
                     <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="nonelist"></div>
                   </td>
                 </tr>
@@ -54,13 +54,13 @@
                     <div v-if="itemlist.num[0]" v-for='(kjlist,kjindex) in itemlist.num'
                          :class="kjindex>=6?'ds-index-kj-po clear_bor':''"
                          :style="kjindex>=6?'left:'+(leftPo*(itemlist.num.length-kjindex))+'px':''"
-                         :key="`${index}key`"
+                         :key="`${kjindex}kjindex`"
                     >
                       <span v-if="kjindex<6" :class="itemlist.DS?'bg-bf0d0b':'bg-0544b8'">{{kjlist}}</span>
                       <span v-if="kjindex>=6" :class="itemlist.DS?'bg-bf0d0b':'bg-0544b8'">{{kjlist}}</span>
                     </div>
                     <div v-if="itemlist.num[0] && itemlist.num.length<6" v-for="nonelist in Math.abs(6-itemlist.num.length)" :key="nonelist"></div>
-                    <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}`"></div>
+                    <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}nonelist`"></div>
                   </td>
                 </tr>
               </table>
@@ -77,7 +77,7 @@
       </div>
       <div class="ds-index-box-right">
         <div id="ds-vd-box" class="ds-vd-box">
-          <video v-for="(vdata,vindex) in videoList" v-if="vdata.FileName==videoName" controlslist="nodownload"
+          <video v-for="(vdata,vindex) in videoList" v-if="vdata.FileName==videoName" :key="vindex" controlslist="nodownload"
                 oncontextmenu="return false" :src="baseUrl+vdata.FileName" id="videoPlay" v-show="true" muted class="video" style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video>
         </div>
         <div class="ds-vd-box" style="height: auto">
@@ -94,7 +94,7 @@
                 <td>昵称</td>
                 <td>盈利</td>
               </tr>
-              <tr v-for="(pmdata,pmindex) in pmList">
+              <tr v-for="(pmdata,pmindex) in pmList" :key="pmindex">
                 <td>{{pmindex+1}}</td>
                 <td>{{pmdata.NickName}}</td>
                 <td>{{pmdata.YL}}</td>

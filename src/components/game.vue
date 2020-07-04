@@ -69,16 +69,26 @@
           <td valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
               <div class="hide-video" v-if="!value"></div>
+              <!-- <video 
+                class="video"
+                id="j-video"
+                x-webkit-airplay="true"
+                webkit-playsinline="true"
+                preload="auto"
+                style="width: 100%; height: 100%; object-fit: fill;"
+              ></video> -->
               <video
                 v-for="(vdata, vindex) in videoList"
                 v-if="vdata.FileName == videoName"
                 :src="baseUrl + vdata.FileName"
                 id="videoPlay"
+                preload
                 controlslist="nodownload"
                 oncontextmenu="return false"
                 :key="vindex"
                 v-show="true"
                 muted
+                autoplay
                 class="video"
                 style="width: 100%; height: 100%; object-fit: fill;"
               >您的浏览器不支持 video 视屏播放。</video>
@@ -92,10 +102,10 @@
                 }}
               </span>
               长江单双路单
-              <span
+              <!-- <span
                 class="ds-index-gp float_right ds-fhdt-btn"
                 @click="toIndex"
-              >返回大厅</span>
+              >返回大厅</span> -->
             </div>
             <div class="contener-box ds-game-cont">
               <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
@@ -512,6 +522,7 @@ import {
   GetZNX,
   GetXZTime
 } from "../common/api";
+import { fetchVideo } from "../common/http"
 import { Toast, Loadmore, Switch } from "mint-ui";
 import Cookies from "js-cookie";
 export default {
@@ -561,6 +572,7 @@ export default {
       grtm: 0, // 2 个人特马
       grdz: 0, // 3 个人对子
       xzlimt: {},
+      currentTime: 0,
 
       baseUrl: "",
       videoList: [],
@@ -588,6 +600,48 @@ export default {
   },
   mounted() {
     this.GetXZTime();
+    // var url = 'http://58.84.7.20:8081/vedio/1.mp4';  // url
+    // var mimeCodec = 'video/mp4; codecs="avc1.640028, mp4a.40.2"'; // 编码格式
+    // PostbirdMp4ToBlob.init('#j-video',url,mimeCodec); // 调用 #video 是选择器 id
+    return false;
+    if (window.MediaSource) {
+      const video = document.getElementById('j-video');
+      const mediaSource = new MediaSource();
+      video.src = window.URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener('sourceopen', sourceOpen);
+      // const videoSourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001e"');
+      // fetch("http://58.84.7.20:8081/vedio/1.mp4").then(function(response) {
+      //   // The data has to be a JavaScript ArrayBuffer
+      //   return response.arrayBuffer();
+      // }).then(function(videoData) {
+      //   videoSourceBuffer.appendBuffer(videoData);
+      //   video.play();
+      // });
+
+      function sourceOpen(e) {
+          URL.revokeObjectURL(video.src);
+          // 设置 媒体的编码类型
+          const mime = 'video/mp4; codecs="avc1.4d400c, avc1.640028, mp4a.40.2"';
+          const mediaSource = e.target;
+          const sourceBuffer = mediaSource.addSourceBuffer(mime);
+          const videoUrl = 'http://58.84.7.20:8081/vedio/1.mp4';
+          fetch(videoUrl).then(response => {
+            console.log(response)
+            return response.arrayBuffer();
+          }).then(videoData=> {
+            sourceBuffer.addEventListener('updateend', function(e) {
+              console.log(mediaSource.readyState, e)
+              if (!sourceBuffer.updating && mediaSource.readyState === 'open') {
+                  mediaSource.endOfStream();
+                  // 在数据请求完成后，我们需要调用 endOfStream()。它会改变 MediaSource.readyState 为 ended 并且触发 sourceended 事件。
+                  video.play()
+                  console.log('sss')
+              }
+            });
+            sourceBuffer.appendBuffer(videoData);
+          });
+      }
+    }
   },
   methods: {
     async GetXZTime() {
@@ -921,6 +975,7 @@ export default {
     },
     playVideo() {
       var thatDSTime = this.DSTime + 1;
+      console.log('currentTime', thatDSTime)
       var vdo = document.getElementById("videoPlay");
       //        setTimeout(function () {
       vdo.currentTime = thatDSTime; //开始播放的时间 s

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Toast,Indicator} from 'mint-ui';
+import { Toast, Indicator } from 'mint-ui';
 import router from '../router'
 import Cookies from 'js-cookie'
 
@@ -9,30 +9,30 @@ import Cookies from 'js-cookie'
 // axios.defaults.withCredentials =true;
 
 // 相对路径设置
-axios.defaults.baseURL ='';
+axios.defaults.baseURL = '';
 
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
         // 获取token
-        const token = Cookies.get('token')?Cookies.get('token'):localStorage.getItem('token');
+        const token = Cookies.get('token') ? Cookies.get('token') : localStorage.getItem('token');
         // 设置参数格式
-        if(!config.headers['Content-Type']){
+        if (!config.headers['Content-Type']) {
             config.headers = {
-                'Content-Type':'application/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8'
             };
         }
         // 添加token到headers
-        if(token){
+        if (token) {
             config.headers.token = encodeURIComponent(token)
         }
         // 鉴权参数设置
-        if(config.method === 'get'){
+        if (config.method === 'get') {
             //get请求下 参数在params中，其他请求在data中
             config.params = config.params || {};
             let json = JSON.parse(JSON.stringify(config.params));
             //一些参数处理
-        }else{
+        } else {
             config.data = config.data || {};
             //一些参数处理
         }
@@ -47,11 +47,11 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         //一些统一code的返回处理
-        if(response.data.code === 501){
+        if (response.data.code === 501) {
             // 登录验证
             //做了个示例跳转项目中登录，并记录下相对路径
             router.push({
-                name:'/login',//从哪个页面跳转
+                name: '/login',//从哪个页面跳转
             })
         }
         return response;
@@ -68,19 +68,19 @@ axios.interceptors.response.use(
  * @param params
  * @returns {Promise}
  */
-export function fetch(url,params={}){
-    return new Promise((resolve,reject) => {
-        let token = localStorage.getItem('token')?localStorage.getItem('token'):Cookies.get('token');
-        if(token && token!='null' && token!='undefined'){
+export function fetch(url, params = {}) {
+    return new Promise((resolve, reject) => {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token') : Cookies.get('token');
+        if (token && token != 'null' && token != 'undefined') {
             Indicator.open();
-            axios.get(url,{
-                params:params
+            axios.get(url, {
+                params: params
             })
                 .then(response => {
-                    if(response.data.code === 200){
+                    if (response.data.code === 200) {
                         //返回成功处理  这里传的啥 后续调用的时候 res就是啥
                         resolve(response.data.data);//我们后台所有数据都是放在返回的data里所以这里统一处理了
-                    }else{
+                    } else {
                         //错误处理
                         resolve(response.data);
                     }
@@ -90,13 +90,13 @@ export function fetch(url,params={}){
                     reject(err);
                     let message = '请求失败！请稍后再试';
                     //错误返回
-                    if(err.response)message=err.response.data.message;
+                    if (err.response) message = err.response.data.message;
                     Toast(message)
                     Indicator.close();
                 })
-        }else{
+        } else {
             router.push({
-                name:'/login',//从哪个页面跳转
+                name: '/login',//从哪个页面跳转
             })
         }
 
@@ -113,36 +113,36 @@ export function fetch(url,params={}){
  * @returns {Promise}
  */
 
-export function post(url,data,login,upload = {},indicators){
-    return new Promise((resolve,reject) => {
-        let token = localStorage.getItem('token')?localStorage.getItem('token'):Cookies.get('token');
-        if(token && token!='null' && token!='undefined' || login){
-            if (!indicators){
-              Indicator.open();
+export function post(url, data, login, upload = {}, indicators) {
+    return new Promise((resolve, reject) => {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token') : Cookies.get('token');
+        if (token && token != 'null' && token != 'undefined' || login) {
+            if (!indicators) {
+                Indicator.open();
             }
-            axios.post(url,data, {
-                    headers: {
-                        'Content-Type':typeof upload != "object" && indicators!=1 ?'image/jpeg':'application/json;charset=UTF-8'
-                    }
-                })
+            axios.post(url, data, {
+                headers: {
+                    'Content-Type': typeof upload != "object" && indicators != 1 ? 'image/jpeg' : 'application/json;charset=UTF-8'
+                }
+            })
                 .then(response => {
-                    if(response.data.code === 200){
+                    if (response.data.code === 200) {
                         resolve(response.data.data);
-                    }else{
+                    } else {
                         resolve(response.data);
                     }
                     Indicator.close();
-                },err => {
+                }, err => {
                     reject(err);
                     let message = '请求失败！请稍后再试';
-                    if(err.response)message=err.response.data.message;
+                    if (err.response) message = err.response.data.message;
                     Toast(message)
                     Indicator.close();
                 })
-        }else{
-            if(!login){
+        } else {
+            if (!login) {
                 router.push({
-                    name:'/login',//从哪个页面跳转
+                    name: '/login',//从哪个页面跳转
                 })
             }
         }
@@ -157,29 +157,29 @@ export function post(url,data,login,upload = {},indicators){
  * @returns {Promise}
  */
 
-export function patch(url,data = {}){
-    return new Promise((resolve,reject) => {
-        let token = localStorage.getItem('token')?localStorage.getItem('token'):Cookies.get('token');
-        if(token && token!='null' && token!='undefined'){
+export function patch(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token') : Cookies.get('token');
+        if (token && token != 'null' && token != 'undefined') {
             Indicator.open();
-            axios.patch(url,data)
+            axios.patch(url, data)
                 .then(response => {
-                    if(response.data.code === 200){
+                    if (response.data.code === 200) {
                         resolve(response.data.data);
-                    }else{
+                    } else {
                         resolve(response.data);
                     }
                     Indicator.close();
-                },err => {
+                }, err => {
                     reject(err);
                     let message = '请求失败！请稍后再试';
-                    if(err.response)message=err.response.data.message;
+                    if (err.response) message = err.response.data.message;
                     Toast(message)
                     Indicator.close();
                 })
-        }else{
+        } else {
             router.push({
-                name:'/login',//从哪个页面跳转\
+                name: '/login',//从哪个页面跳转\
             })
         }
     })
@@ -192,62 +192,67 @@ export function patch(url,data = {}){
  * @returns {Promise}
  */
 
-export function put(url,data = {}){
-    return new Promise((resolve,reject) => {
-        let token = localStorage.getItem('token')?localStorage.getItem('token'):Cookies.get('token');
-        if(token && token!='null' && token!='undefined'){
+export function put(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token') : Cookies.get('token');
+        if (token && token != 'null' && token != 'undefined') {
             Indicator.open();
-            axios.put(url,data)
+            axios.put(url, data)
                 .then(response => {
-                    if(response.data.code === 200){
+                    if (response.data.code === 200) {
                         resolve(response.data.data);
-                    }else{
+                    } else {
                         resolve(response.data);
                     }
                     Indicator.close();
-                },err => {
+                }, err => {
                     reject(err);
                     let message = '请求失败！请稍后再试';
-                    if(err.response)message=err.response.data.message;
+                    if (err.response) message = err.response.data.message;
                     Toast(message)
                     Indicator.close();
                 })
-        }else{
+        } else {
             router.push({
-                name:'/login',//从哪个页面跳转
-                query:{
-                    retUrl:window.location.href.split('#')[1] || '',
-                    is_new_user_url:1
+                name: '/login',//从哪个页面跳转
+                query: {
+                    retUrl: window.location.href.split('#')[1] || '',
+                    is_new_user_url: 1
                 }
             })
         }
     })
 }
 
-export function del(url,data = {}){
-    return new Promise((resolve,reject) => {
-        let token = localStorage.getItem('token')?localStorage.getItem('token'):Cookies.get('token');
-        if(token && token!='null' && token!='undefined'){
+export function del(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        let token = localStorage.getItem('token') ? localStorage.getItem('token') : Cookies.get('token');
+        if (token && token != 'null' && token != 'undefined') {
             Indicator.open();
-            axios.delete(url,data)
+            axios.delete(url, data)
                 .then(response => {
-                    if(response.data.code === 200){
+                    if (response.data.code === 200) {
                         resolve(response.data.data);
-                    }else{
+                    } else {
                         resolve(response.data);
                     }
                     Indicator.close();
-                },err => {
+                }, err => {
                     reject(err);
                     let message = '请求失败！请稍后再试';
-                    if(err.response)message=err.response.data.message;
+                    if (err.response) message = err.response.data.message;
                     Toast(message)
                     Indicator.close();
                 })
-        }else{
+        } else {
             router.push({
-                name:'/login',//从哪个页面跳转
+                name: '/login',//从哪个页面跳转
             })
         }
     })
+}
+
+
+export const fetchVideo = (url) => {
+    return axios.get(url, { responseType: 'arraybuffer' })
 }

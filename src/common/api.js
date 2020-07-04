@@ -247,6 +247,17 @@ export const GetXZTime = () => {
     return Vue.prototype.$post(_baseUrl + 'GetXZTime')
 };
 
+/**
+ * cd 撤单
+ * @parmas {UserName}
+ * @returns {MContent}
+ * @returns {AddTime}
+ * UserName
+ */
+export const Revoke = (data) => {
+    return Vue.prototype.$post(_baseUrl + 'cd', data)
+};
+
 
 
 

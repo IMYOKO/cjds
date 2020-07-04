@@ -26,6 +26,11 @@
               <el-table-column prop="JYQMoney" label="交易前余额"></el-table-column>
               <el-table-column prop="XZMoney" label="下注余额"></el-table-column>
               <el-table-column prop="SY" label="输赢"></el-table-column>
+              <el-table-column prop="Status" label="操作">
+                <template slot-scope="scope" v-if="scope.row.Status === 0">
+                  <span class="caozuo" @click="revoke(scope.row)">撤单</span>
+                </template>
+              </el-table-column>
             </el-table>
             <el-pagination class="el_page_ui"
                layout="total, prev, pager, next"
@@ -87,7 +92,7 @@
   </div>
 </template>
 <script>
-  import { GetWithdrawal,GetRecharge } from "../common/api";
+  import { GetWithdrawal, GetRecharge, Revoke } from "../common/api";
   import { Toast  } from 'mint-ui';
   export default {
     props: ['historyShow','historyArr'], // 父组件传入数据， 数组形式,type类别
@@ -107,6 +112,17 @@
     created(){
     },
     methods: {
+      revoke(item) {
+        const id = item.Id
+        Revoke({id}).then((res)=>{
+          if(res.Status){
+            Toast('操作成功');
+            this.dsNavFn(this.navAc)
+          }else {
+            Toast('操作失败');
+          }
+        })
+      },
       getWithdrawal(){
         var dx = this.navAc;
         GetWithdrawal({DayType:dx}).then(res=>{
@@ -245,7 +261,7 @@
     }
   }
 </script>
-<style scoped>
+<style lang='less' scoped>
   .ds-alerts-box{ width: 70%; left: 50%; margin-left: -35%; top: 20%; position: fixed;}
   .ds-alerts-title1{ text-align: center; background-color: #1f110e; color: #ffffff;}
   .ds-alerts-cont{ background-color: #0a0605;}
@@ -253,4 +269,13 @@
   .ds-popularize-btn-active{ background-color: #5b3e30;}
   .ds-js-cont{ width: 100%; overflow: auto; max-height: 500px; color: #ffffff;}
   .ds-js-cont td{ font-weight: bold; line-height: 30px; padding: 15px;}
+  .caozuo {
+    color: #fff;
+    font-size: 14px !important;
+    cursor: pointer;
+    padding: 4px 8px;
+    background: #553d31;
+    border-radius: 5px
+
+  }
 </style>
