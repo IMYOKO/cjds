@@ -164,7 +164,7 @@
             >
               <div v-if="gameInfo[0].Money">{{ gameInfo[0].Money }}</div>
             </div>
-            <span style="display: block;">1:12</span>
+            <span style="display: block;">{{tmSOdds}}</span>
           </td>
           <td>
             <div class="contener-box">
@@ -176,7 +176,7 @@
                 @click="upGame('3:4')"
               >
                 <div v-if="gameInfo[1].Money">{{ gameInfo[1].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -186,7 +186,7 @@
                 @click="upGame('1:4')"
               >
                 <div v-if="gameInfo[2].Money">{{ gameInfo[2].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
             <div class="contener-box">
@@ -198,7 +198,7 @@
                 @click="upGame('1:6')"
               >
                 <div v-if="gameInfo[3].Money">{{ gameInfo[3].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -208,7 +208,7 @@
                 @click="upGame('2:3')"
               >
                 <div v-if="gameInfo[4].Money">{{ gameInfo[4].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
           </td>
@@ -235,7 +235,7 @@
                 @click="upGame('2:5')"
               >
                 <div v-if="gameInfo[5].Money">{{ gameInfo[5].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -245,7 +245,7 @@
                 @click="upGame('3:6')"
               >
                 <div v-if="gameInfo[6].Money">{{ gameInfo[6].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
             <div class="contener-box">
@@ -257,7 +257,7 @@
                 @click="upGame('4:5')"
               >
                 <div v-if="gameInfo[7].Money">{{ gameInfo[7].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -267,7 +267,7 @@
                 @click="upGame('5:6')"
               >
                 <div v-if="gameInfo[8].Money">{{ gameInfo[8].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
           </td>
@@ -295,7 +295,7 @@
             >
               <div v-if="gameInfo[10].Money">{{ gameInfo[10].Money }}</div>
             </div>
-            <span style="display: block;">1:12</span>
+            <span style="display: block;">{{tmSOdds}}</span>
           </td>
           <td>
             <div class="contener-box">
@@ -307,7 +307,7 @@
                 @click="upGame('3:5')"
               >
                 <div v-if="gameInfo[11].Money">{{ gameInfo[11].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -317,7 +317,7 @@
                 @click="upGame('1:5')"
               >
                 <div v-if="gameInfo[12].Money">{{ gameInfo[12].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -327,7 +327,7 @@
                 @click="upGame('2:4')"
               >
                 <div v-if="gameInfo[13].Money">{{ gameInfo[13].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
             <div class="contener-box">
@@ -339,7 +339,7 @@
                 @click="upGame('2:6')"
               >
                 <div v-if="gameInfo[14].Money">{{ gameInfo[14].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
               <div
                 :class="{
@@ -349,13 +349,13 @@
                 @click="upGame('4:6')"
               >
                 <div v-if="gameInfo[15].Money">{{ gameInfo[15].Money }}</div>
-                <span>1:11</span>
+                <span>{{tmOdds}}</span>
               </div>
             </div>
           </td>
           <td class="ds-tb-middle">
             <!--<div class="ds-game-bg-z-bg ds-game-4-1">-->
-            <!--<span>1:11</span>-->
+            <!--<span>{{tmOdds}}</span>-->
             <!--</div>-->
             <div
               :class="{
@@ -379,7 +379,7 @@
                 @click="upGame('1:1')"
               >
                 <div v-if="gameInfo[16].Money">{{ gameInfo[16].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
               <div
                 :class="{
@@ -389,7 +389,7 @@
                 @click="upGame('2:2')"
               >
                 <div v-if="gameInfo[17].Money">{{ gameInfo[17].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
               <div
                 :class="{
@@ -399,7 +399,7 @@
                 @click="upGame('3:3')"
               >
                 <div v-if="gameInfo[18].Money">{{ gameInfo[18].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
             </div>
             <div class="contener-box">
@@ -411,7 +411,7 @@
                 @click="upGame('4:4')"
               >
                 <div v-if="gameInfo[19].Money">{{ gameInfo[19].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
               <div
                 :class="{
@@ -421,7 +421,7 @@
                 @click="upGame('5:5')"
               >
                 <div v-if="gameInfo[20].Money">{{ gameInfo[20].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
               <div
                 :class="{
@@ -431,7 +431,7 @@
                 @click="upGame('6:6')"
               >
                 <div v-if="gameInfo[21].Money">{{ gameInfo[21].Money }}</div>
-                <span>1:11</span>
+                <span>{{dzOdds}}</span>
               </div>
             </div>
           </td>
@@ -573,7 +573,10 @@ export default {
       grdz: 0, // 3 个人对子
       xzlimt: {},
       currentTime: 0,
-
+      grOdds: '1:1',
+      tmOdds: '1:11',
+      tmSOdds: '1:0.7',
+      dzOdds: '1:18',
       baseUrl: "",
       videoList: [],
       XZTime: 0, //游戏倒计时

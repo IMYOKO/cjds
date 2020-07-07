@@ -30,9 +30,9 @@
             <div class="contener-box ds-gz-cont">
               特码不抽水
               <br>单
-              <span>1:2</span>单赢一半
+              <span>1:2</span> 赢70%
               <br>单
-              <span>1:3</span>双赢一半
+              <span>1:3</span> 赢70%
               <br>
             </div>
           </div>
@@ -54,7 +54,7 @@
         </div>
         <div class="float_right">
           <ul class="ds-right-nav-icon">
-            <li class="ds-right-nav-icon-get ds-icon-top-1" title="声音" @click="setSound"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-1" :title="`${soundMute === true? '开启声音': '关闭声音'}`" @click="setSound"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-2" title="会员消息" @click="showtVipMessage"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-3" title="电话"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-4" @click="toshowhistory" title="历史记录"></li>
@@ -70,7 +70,8 @@
               title="修改密码"
             ></li>
             <li class="ds-right-nav-icon-get ds-icon-top-8" @click="changePshow" title="推广"></li>
-            <li class="ds-right-nav-icon-get ds-icon-top-9" @click="toIndex" title="返回大厅"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-9" @click="toIndex" title="返回大厅" v-if="urlPath === '/game'"></li>
+            <li class="ds-right-nav-icon-get ds-icon-top-9" @click="getlogout" title="退出登录" v-if="urlPath === '/'"></li>
           </ul>
         </div>
       </div>
@@ -111,6 +112,7 @@ import VipMessage from "@/components/vip-message";
 import { Toast, Actionsheet, Loadmore } from "mint-ui";
 import { Withdrawal, GetOrder, GetGG } from "./common/api";
 import Cookies from "js-cookie";
+import { SoundManage, CLOSED, SoundType } from '@/utils/audio'
 export default {
   name: "App",
   components: {
@@ -136,7 +138,7 @@ export default {
       wShow: false,
       wTypea: "",
       infoWithdrawal: [],
-      sound: true
+      soundMute: localStorage.getItem(SoundType.bgm) === CLOSED ? true : false
     };
   },
   created() {
@@ -144,9 +146,19 @@ export default {
     this.loginSat();
     this.getWithdrawal(false);
   },
+  mounted() {
+    // SoundManage.homeBgm.play();
+  },
   methods: {
     setSound() {
-      this.sound = !this.sound;
+      this.soundMute = !this.soundMute;
+      // if (this.soundMute) {
+      //   localStorage.setItem(SoundType.bgm, CLOSED);
+      //   SoundManage.homeBgm.stop();
+      // } else {
+      //   localStorage.removeItem(SoundType.bgm);
+      //   SoundManage.homeBgm.play();
+      // }
     },
     getlogout: function() {
       //退出登录
@@ -270,7 +282,6 @@ export default {
       this.$refs.vipMessage.updateModal(true);
     }
   },
-  mounted() {},
   watch: {
     // 使用watch 监听$router的变化
     $route(to, from) {
