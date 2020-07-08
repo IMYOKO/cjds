@@ -204,7 +204,7 @@ export const GetKJ = function () {
     return Vue.prototype.$post(_baseUrl + 'GetKJ', '', '', '', true)
 };
 
-// GetBankInfo 获取银行卡信息
+// GetBankInfo 获取银行卡信息 收款方信息
 export const GetBankInfo = function () {
     return Vue.prototype.$post(_baseUrl + 'GetBankInfo')
 };
@@ -238,10 +238,6 @@ export const GetZNX = () => {
 
 /**
  * GetXZTime 获取下注倒计时
- * @returns {UserName}
- * @returns {MContent}
- * @returns {AddTime}
- * UserName
  */
 export const GetXZTime = () => {
     return Vue.prototype.$post(_baseUrl + 'GetXZTime')
@@ -249,13 +245,16 @@ export const GetXZTime = () => {
 
 /**
  * cd 撤单
- * @parmas {UserName}
- * @returns {MContent}
- * @returns {AddTime}
- * UserName
  */
 export const Revoke = (data) => {
     return Vue.prototype.$post(_baseUrl + 'cd', data)
+};
+
+/**
+ * GetUserInfo 获取用户信息
+ */
+export const GetUserInfo = (data) => {
+    return Vue.prototype.$post(_baseUrl + 'GetUserInfo', data)
 };
 
 

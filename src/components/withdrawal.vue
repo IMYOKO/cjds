@@ -229,16 +229,15 @@ export default {
       } catch (error) {}
     },
     getAddWithdrawal() {
-      let that = this;
-      if (!that.wTypes) {
-        if (that.Name && that.Zh && that.Bankno && that.Money && that.Tkmm) {
+      if (!this.wTypes) {
+        if (this.Name && this.Zh && this.Bankno && this.Money && this.Tkmm) {
           let json = {
-            Name: that.Name,
-            Bankname: that.Bankname,
-            Zh: that.Zh,
-            Bankno: that.Bankno,
-            Money: that.Money,
-            Tkmm: that.Tkmm
+            Name: this.Name,
+            Bankname: this.Bankname,
+            Zh: this.Zh,
+            Bankno: this.Bankno,
+            Money: this.Money,
+            Tkmm: this.Tkmm
           };
           AddWithdrawal(json).then(res => {
             console.log(res);

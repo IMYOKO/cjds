@@ -68,6 +68,7 @@
           </td>
           <td valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
+              <div class="xiazhu-time">{{kjdjs}}</div>
               <div class="hide-video" v-if="!value"></div>
               <!-- <video 
                 class="video"
@@ -96,11 +97,11 @@
           </td>
           <td width="680" valign="top">
             <div class="ds-game-title clear_box">
-              <span class="xzTime" style="float: left;">
+              <!-- <span class="xzTime" style="float: left;">
                 {{
                 kjdjs
                 }}
-              </span>
+              </span> -->
               长江单双路单
               <!-- <span
                 class="ds-index-gp float_right ds-fhdt-btn"
@@ -1103,7 +1104,8 @@ export default {
     box-shadow: 0 4px 5px rgba(255, 255, 0, 0.5);
   }
 }
-.xzTime {
+.xzTime,
+.xiazhu-time {
   color: #bf0e0b;
   font-size: 28px;
   font-weight: bold;
@@ -1115,5 +1117,12 @@ export default {
   border-radius: 20px;
   background-color: #fdfd76;
   margin: 8px 0 0 10px;
+}
+.xiazhu-time {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 0;
+  z-index: 20;
 }
 </style>

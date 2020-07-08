@@ -27,8 +27,9 @@
               <el-table-column prop="XZMoney" label="下注余额"></el-table-column>
               <el-table-column prop="SY" label="输赢"></el-table-column>
               <el-table-column prop="Status" label="操作">
-                <template slot-scope="scope" v-if="scope.row.Status === 0">
-                  <span class="caozuo" @click="revoke(scope.row)">撤单</span>
+                <template slot-scope="scope">
+                  <span class="caozuo" @click="revoke(scope.row)" v-if="scope.row.Status === 0">撤单</span>
+                  <span @click="revoke(scope.row)" v-if="scope.row.Status === 2">已撤单</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -269,6 +270,11 @@
   .ds-popularize-btn-active{ background-color: #5b3e30;}
   .ds-js-cont{ width: 100%; overflow: auto; max-height: 500px; color: #ffffff;}
   .ds-js-cont td{ font-weight: bold; line-height: 30px; padding: 15px;}
+  .cell {
+    span {
+      font-size: 14px !important;
+    }
+  }
   .caozuo {
     color: #fff;
     font-size: 14px !important;

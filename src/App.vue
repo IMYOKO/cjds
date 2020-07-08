@@ -79,7 +79,7 @@
         <!--<transition :name="transitionName">-->
         <!--<router-view/>-->
         <!--</transition>-->
-        <router-view @userInfoFn="getWithdrawal" :banlance="infoWithdrawal.Banlance"/>
+        <router-view @userInfoFn="getWithdrawal" :banlance="banlance"/>
       </div>
       <!--修改密码-->
       <alerts @showalert="toshow" :ptitle="alertTitle" :type="alertType" :show="showType"></alerts>
@@ -110,7 +110,7 @@ import withdrawal from "@/components/withdrawal";
 import history from "@/components/history";
 import VipMessage from "@/components/vip-message";
 import { Toast, Actionsheet, Loadmore } from "mint-ui";
-import { Withdrawal, GetOrder, GetGG } from "./common/api";
+import { Withdrawal, GetOrder, GetGG, GetUserInfo } from "./common/api";
 import Cookies from "js-cookie";
 import { SoundManage, CLOSED, SoundType } from '@/utils/audio'
 export default {
@@ -138,7 +138,9 @@ export default {
       wShow: false,
       wTypea: "",
       infoWithdrawal: [],
-      soundMute: localStorage.getItem(SoundType.bgm) === CLOSED ? true : false
+      soundMute: localStorage.getItem(SoundType.bgm) === CLOSED ? true : false,
+      banlance: 0,
+      timer: null
     };
   },
   created() {
@@ -148,6 +150,13 @@ export default {
   },
   mounted() {
     // SoundManage.homeBgm.play();
+    this.GetUserInfo();
+    this.timer = setInterval(()=>{
+      this.GetUserInfo();
+    }, 10000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     setSound() {
@@ -159,6 +168,12 @@ export default {
       //   localStorage.removeItem(SoundType.bgm);
       //   SoundManage.homeBgm.play();
       // }
+    },
+    async GetUserInfo() {
+      const res = await GetUserInfo();
+      if (res && res.Code === 200 && res.Status === true) {
+        this.banlance = res.Data.Banlance
+      }
     },
     getlogout: function() {
       //退出登录
