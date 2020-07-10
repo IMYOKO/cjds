@@ -252,31 +252,31 @@ export default {
         }
       } else {
         if (
-          (that.Name && that.BankFS == 1 && that.Money) ||
-          (that.BankFS != 1 && that.Money && that.BankFS)
+          (this.Name && this.BankFS == 1 && this.Money) ||
+          (this.BankFS != 1 && this.Money && this.BankFS)
         ) {
           var json = {};
           if (this.BanknameStatus) {
             json = {
-              Name: that.Name,
-              Bankname: that.Bankname,
-              BankFS: that.BankFS,
-              Money: that.Money,
-              Type: that.BankFS
+              Name: this.Name,
+              Bankname: this.Bankname,
+              BankFS: this.BankFS,
+              Money: this.Money,
+              Type: this.BankFS
             };
           } else {
             json = {
               Name: "",
               Bankname: "",
-              BankFS: that.BankFS,
-              Money: that.Money,
-              Type: that.BankFS
+              BankFS: this.BankFS,
+              Money: this.Money,
+              Type: this.BankFS
             };
           }
           AddRecharge(json).then(res => {
             if (res.Status) {
-              // if (that.BanknameStatus) {
-              //   that.yinhang = res.Data;
+              // if (this.BanknameStatus) {
+              //   this.yinhang = res.Data;
               // }
               Toast("充值已提交！");
             } else {

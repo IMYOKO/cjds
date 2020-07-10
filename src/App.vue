@@ -149,11 +149,11 @@ export default {
     this.getWithdrawal(false);
   },
   mounted() {
-    // SoundManage.homeBgm.play();
+    SoundManage.homeBgm.play();
     this.GetUserInfo();
     this.timer = setInterval(()=>{
       this.GetUserInfo();
-    }, 10000)
+    }, 15000)
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -161,18 +161,28 @@ export default {
   methods: {
     setSound() {
       this.soundMute = !this.soundMute;
-      // if (this.soundMute) {
-      //   localStorage.setItem(SoundType.bgm, CLOSED);
-      //   SoundManage.homeBgm.stop();
-      // } else {
-      //   localStorage.removeItem(SoundType.bgm);
-      //   SoundManage.homeBgm.play();
-      // }
+      if (this.soundMute) {
+        localStorage.setItem(SoundType.bgm, CLOSED);
+        SoundManage.homeBgm.stop();
+      } else {
+        localStorage.removeItem(SoundType.bgm);
+        SoundManage.homeBgm.play();
+      }
     },
     async GetUserInfo() {
       const res = await GetUserInfo();
       if (res && res.Code === 200 && res.Status === true) {
         this.banlance = res.Data.Banlance
+        if (res.Data.IsFrozen) {
+          Toast("账户被冻结！");
+          Cookies.set("token", "");
+          const cookie = Cookies.get("token");
+          if (!cookie) {
+            setTimeout(() => {
+              this.$router.push({ path: "/login" });
+            }, 1500);
+          }
+        }
       }
     },
     getlogout: function() {

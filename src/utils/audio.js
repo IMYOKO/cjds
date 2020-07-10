@@ -1,5 +1,5 @@
 import { Howl } from 'howler';
-// import homeBgMp3 from '@/assets/mp3/home_bg.mp3';
+import homeBgMp3 from '@/assets/mp3/home_bg.mp3';
 
 export const CLOSED = 'closed';
 export const SoundType = {
@@ -44,7 +44,7 @@ class Audio {
 }
 
 const homeBgm = new Audio({
-    src: 'homeBgMp3',
+    src: homeBgMp3,
     loop: true,
     autoplay: false,
     volume: 0.5
