@@ -79,7 +79,7 @@
         <!--<transition :name="transitionName">-->
         <!--<router-view/>-->
         <!--</transition>-->
-        <router-view @userInfoFn="getWithdrawal" :banlance="banlance"/>
+        <router-view @userInfoFn="getWithdrawal" @getUserInfo="getUserInfo" :banlance="banlance"/>
       </div>
       <!--修改密码-->
       <alerts @showalert="toshow" :ptitle="alertTitle" :type="alertType" :show="showType"></alerts>
@@ -140,7 +140,7 @@ export default {
       infoWithdrawal: [],
       soundMute: localStorage.getItem(SoundType.bgm) === CLOSED ? true : false,
       banlance: 0,
-      timer: null
+      timer: null,
     };
   },
   created() {
@@ -150,27 +150,10 @@ export default {
   },
   mounted() {
     SoundManage.homeBgm.play();
-    this.GetUserInfo();
-    this.timer = setInterval(()=>{
-      this.GetUserInfo();
-    }, 15000)
-  },
-  beforeDestroy() {
-    clearInterval(this.timer);
   },
   methods: {
-    setSound() {
-      this.soundMute = !this.soundMute;
-      if (this.soundMute) {
-        localStorage.setItem(SoundType.bgm, CLOSED);
-        SoundManage.homeBgm.stop();
-      } else {
-        localStorage.removeItem(SoundType.bgm);
-        SoundManage.homeBgm.play();
-      }
-    },
-    async GetUserInfo() {
-      const res = await GetUserInfo();
+    async getUserInfo(id) {
+      const res = await GetUserInfo({tableId: id});
       if (res && res.Code === 200 && res.Status === true) {
         this.banlance = res.Data.Banlance
         if (res.Data.IsFrozen) {
@@ -183,6 +166,16 @@ export default {
             }, 1500);
           }
         }
+      }
+    },
+    setSound() {
+      this.soundMute = !this.soundMute;
+      if (this.soundMute) {
+        localStorage.setItem(SoundType.bgm, CLOSED);
+        SoundManage.homeBgm.stop();
+      } else {
+        localStorage.removeItem(SoundType.bgm);
+        SoundManage.homeBgm.play();
       }
     },
     getlogout: function() {

@@ -590,7 +590,8 @@ export default {
       XzISOk: false,
       kjstatus: false,
       isAllin: false,
-      xzTime: 0
+      xzTime: 0,
+      timer: null
     };
   },
   created() {
@@ -603,6 +604,10 @@ export default {
     }
   },
   mounted() {
+    this.$emit('getUserInfo', this.id);
+    this.timer = setInterval(()=>{
+      this.$emit('getUserInfo', this.id);
+    }, 15000)
     this.GetXZTime();
     // var url = 'http://58.84.7.20:8081/vedio/1.mp4';  // url
     // var mimeCodec = 'video/mp4; codecs="avc1.640028, mp4a.40.2"'; // 编码格式
@@ -646,6 +651,9 @@ export default {
           });
       }
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     async GetXZTime() {

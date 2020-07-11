@@ -132,6 +132,7 @@
         kjdjs:0,
         XzISOk:false,
         kjstatus:false,
+        timer: null
       }
     },
     created() {
@@ -241,8 +242,7 @@
       },
       toGame(id){
         if (id){
-//          this.$router.push('/game')
-          this.$router.push({path: '/game',query:{id:id}});
+          this.$router.push({path: '/game',query:{ id }});
         }
       },
       countDown(time){
@@ -277,24 +277,29 @@
       },
     },
     mounted(){
-      var that = this;
-//      that.countDown();
-      setInterval(function () {
+      this.$emit('getUserInfo', 0);
+      this.timer = setInterval(()=>{
+        this.$emit('getUserInfo', 0);
+      }, 15000)
+      setInterval(() => {
         var vdos = document.getElementById("videoPlay");
-        if(that.$route.path=='/'){
-          if (that.XZTime == parseInt(vdos.currentTime) || that.XZTime < parseInt(vdos.currentTime)){
-            console.log(that.XZTime,parseInt(vdos.currentTime),that.XzISOk)
-            that.countDown(parseInt(vdos.currentTime));
-            if(!that.kjstatus){
+        if(this.$route.path=='/'){
+          if (this.XZTime == parseInt(vdos.currentTime) || this.XZTime < parseInt(vdos.currentTime)){
+            console.log(this.XZTime,parseInt(vdos.currentTime),this.XzISOk)
+            this.countDown(parseInt(vdos.currentTime));
+            if(!this.kjstatus){
               GetKJ().then(res=>{});
-              that.kjstatus = true;
+              this.kjstatus = true;
             }
           }else {
-            that.kjstatus = false;
+            this.kjstatus = false;
           }
         }
       },1000)
-    }
+    },
+    beforeDestroy() {
+      clearInterval(this.timer);
+    },
   }
 </script>
 
