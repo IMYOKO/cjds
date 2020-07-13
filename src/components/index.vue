@@ -80,9 +80,9 @@
           <video v-for="(vdata,vindex) in videoList" v-if="vdata.FileName==videoName" :key="vindex" controlslist="nodownload"
                 oncontextmenu="return false" :src="baseUrl+vdata.FileName" id="videoPlay" v-show="true" muted class="video" style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video>
         </div>
-        <div class="ds-vd-box" style="height: auto">
+        <!-- <div class="ds-vd-box" style="height: auto">
           <img src="../../static/ds/t1.jpg">
-        </div>
+        </div> -->
         <div class="ds-vd-box" style="height: auto">
           <div class="contener-box" style=" background-color: #1f1e1a; padding-top: 5px;">
             <img src="../../static/ds/t2.jpg" style="width: 101px; margin: auto;">

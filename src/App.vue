@@ -69,7 +69,7 @@
               @click="changePasswordOld('修改密码',2)"
               title="修改密码"
             ></li>
-            <li class="ds-right-nav-icon-get ds-icon-top-8" @click="changePshow" title="推广"></li>
+            <!-- <li class="ds-right-nav-icon-get ds-icon-top-8" @click="changePshow" title="推广"></li> -->
             <li class="ds-right-nav-icon-get ds-icon-top-9" @click="toIndex" title="返回大厅" v-if="urlPath === '/game'"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-9" @click="getlogout" title="退出登录" v-if="urlPath === '/'"></li>
           </ul>

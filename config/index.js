@@ -11,25 +11,25 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/api': {
-            target: 'https://api.douban.com/v2/movie/',//设置你调用的接口域名和端口号 别忘了加http、https
-            changeOrigin: true,//是否跨域
-            // secure: true, // 允许https请求
-            pathRewrite: {
-                '^/api': '/api'//这里理解成用‘/api’代替target里面的地址
-            }
+      '/api': {
+        target: 'https://api.douban.com/v2/movie/',//设置你调用的接口域名和端口号 别忘了加http、https
+        changeOrigin: true,//是否跨域
+        // secure: true, // 允许https请求
+        pathRewrite: {
+          '^/api': '/api'//这里理解成用‘/api’代替target里面的地址
         }
+      }
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */

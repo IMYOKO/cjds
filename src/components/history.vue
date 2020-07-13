@@ -4,7 +4,7 @@
       <div :class="{'ds-h-btn-active':topAc == '1','ds-popularize-btn ds-h-btn':1}" @click="dsHFn(1)">长江单双</div>
       <span :class="{'ds-h-btn-active':topAc == '2','float_left ds-h-btn':1}" @click="dsHFn(2)">上分</span>
       <span :class="{'ds-h-btn-active':topAc == '3','float_left ds-h-btn':1}" @click="dsHFn(3)">下分</span>
-      <span :class="{'ds-h-btn-active':topAc == '4','float_left ds-h-btn':1}" @click="dsHFn(4)">返佣</span>
+      <!-- <span :class="{'ds-h-btn-active':topAc == '4','float_left ds-h-btn':1}" @click="dsHFn(4)">返佣</span> -->
       <span class="ds-alert-close" @click="dsAlertClose">关闭</span>
     </div>
     <div class="ds-alerts-cont clear_box" style="background-color: #553d31;">

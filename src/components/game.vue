@@ -576,7 +576,7 @@ export default {
       currentTime: 0,
       grOdds: '1:1',
       tmOdds: '1:11',
-      tmSOdds: '1:0.7',
+      tmSOdds: '1:12',
       dzOdds: '1:18',
       baseUrl: "",
       videoList: [],
@@ -591,7 +591,9 @@ export default {
       kjstatus: false,
       isAllin: false,
       xzTime: 0,
-      timer: null
+      timer: null,
+      timer2: null,
+      timer3: null,
     };
   },
   created() {
@@ -654,6 +656,8 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    clearInterval(this.timer2);
+    clearInterval(this.timer3);
   },
   methods: {
     async GetXZTime() {
@@ -666,7 +670,7 @@ export default {
     },
     init() {
       this.$nextTick(()=>{
-        setInterval(() => {
+        this.timer2 = setInterval(() => {
           var vdos = document.getElementById("videoPlay");
           if (this.$route.path == "/game") {
             if (
@@ -927,7 +931,6 @@ export default {
       });
     },
     AddVedio(vName) {
-      console.log({vName})
       if (vName) {
         var txtName = "";
         for (var i = 0; i < this.videoList.length; i++) {
@@ -1034,7 +1037,7 @@ export default {
           this.kjdjs = this.xzTime;
           this.XzISOk = true;
         }
-        var interval = setInterval(() => {
+        this.timer3 = setInterval(() => {
           if (this.XzISOk) {
             --this.kjdjs;
             this.XzISOk = true;
@@ -1042,7 +1045,7 @@ export default {
               this.kjdjs = 0;
               this.XzISOk = false;
               this.AddVedio(this.videoName);
-              clearInterval(interval);
+              clearInterval(this.timer3);
             }
           }
         }, 1000);
