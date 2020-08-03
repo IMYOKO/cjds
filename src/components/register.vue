@@ -95,7 +95,9 @@ export default {
       }, 1000);
       try {
         const res = await GetSMS({ Phone: this.Phone });
-        Toast("验证码已经发出，请注意查收");
+        if (res && res.Status) {
+          Toast("验证码已经发出，请注意查收");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -162,9 +164,14 @@ export default {
           YQM: this.YQM
         };
         const res = await Register(data);
-        Toast("注册成功");
+        if (res && res.Status) {
+          Toast("注册成功");
+        } else {
+          Toast("注册失败");
+        }
       } catch (error) {
         console.log(error);
+        Toast("注册失败");
       }
     }
   }

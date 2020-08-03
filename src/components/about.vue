@@ -1,7 +1,7 @@
 <template>
   <div v-show="showpType" class="ds-alerts-box">
     <div class="ds-alerts-title1 clear_box">
-      <div class="ds-popularize-btn ds-popularize-btn-active">长江单双</div>
+      <div class="ds-popularize-btn ds-popularize-btn-active">游戏规则</div>
       <span class="ds-alert-close" @click="dsAlertClose">关闭</span>
     </div>
     <div class="ds-alerts-cont clear_box">
@@ -9,51 +9,68 @@
         <table class="ds-tg-table" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              一、点数计算：两颗骰子相加之和
             </td>
           </tr>
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              二、路单：单数显示为蓝色，双数显式为红色。例如2:3即显示蓝色；1:5即显示红色。
             </td>
           </tr>
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
-            </td>
-          </tr>
-        </table>
-        <table class="ds-tg-table" cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
-            </td>
-          </tr>
-          <tr>
-            <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
-            </td>
-          </tr>
-          <tr>
-            <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              三、下注单、双、吃单数和吃双数：下注单、双、吃单数和吃双数时。开出1:2，则单赢70%，双输；开出1:3则双赢70%，单输。
             </td>
           </tr>
         </table>
         <table class="ds-tg-table" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              四、特码规则：
             </td>
           </tr>
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              1:4，1:5，1:6，2:3，2:4，2:5，2:6，3:4，3:5，3:6，4:5，4:6，5:6
             </td>
           </tr>
           <tr>
             <td>
-              推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励推广奖励
+              开出以上任意牌型赔率1:11
+            </td>
+          </tr>
+        </table>
+        <table class="ds-tg-table" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              开出对子，如1:1，2:2，3:3，4:4，5:5，6:6则赔率1:18
+            </td>
+          </tr>
+          <tr>
+            <td>
+              如开出1:2，1:3特码时，则赔率1：12
+            </td>
+          </tr>
+          <tr>
+            <td>
+              下注并盈利特码不抽水
+            </td>
+          </tr>
+        </table>
+        <table class="ds-tg-table" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              五、押单，押双，押吃单数，押吃双数： 押单，押双，押吃单数，押吃双数，赔率均为1:1。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              六、吃单数和吃双数： 本金范围内可押注吃单数或者吃双数。当开单数时，则吃单数输，吃双数赢。当开双数时，吃双数输吃单数赢。
+            </td>
+          </tr>
+          <tr>
+            <td>
+              七、开奖结果以现场视讯显示为准。
             </td>
           </tr>
         </table>
@@ -69,8 +86,6 @@
       return {
         showpType:'',
       }
-    },
-    created(){
     },
     methods: {
       dsAlertClose(){

@@ -6,7 +6,7 @@
           <td width="280" valign="top">
             <table cellpadding="0" cellspacing="0" width="100%">
               <tr>
-                <td width=''>桌台信息:</td>
+                <td>桌台信息:</td>
                 <td v-if="id == 1">{{ kj_top_info[0] ? kj_top_info[0].TableName : "" }}</td>
                 <td v-if="id == 2">{{ kj_top_info[1] ? kj_top_info[1].TableName : "" }}</td>
               </tr>
@@ -66,7 +66,7 @@
               </tr>
             </table>
           </td>
-          <td width="667" valign="top">
+          <td valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
               <div class="xiazhu-time">{{kjdjs}}</div>
               <div class="hide-video" v-if="!value"></div>
@@ -96,9 +96,18 @@
               >您的浏览器不支持 video 视屏播放。</video> -->
             </div>
           </td>
-          <td width="" valign="top">
+          <td width="680" valign="top">
             <div class="ds-game-title clear_box">
+              <!-- <span class="xzTime" style="float: left;">
+                {{
+                kjdjs
+                }}
+              </span> -->
               长江单双路单
+              <!-- <span
+                class="ds-index-gp float_right ds-fhdt-btn"
+                @click="toIndex"
+              >返回大厅</span> -->
             </div>
             <div class="contener-box ds-game-cont">
               <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
@@ -599,7 +608,7 @@ export default {
       this.$router.push("/");
     } else {
       // this.GetVedio(); //获取视频列表
-      this.getGetGameTable();
+      // this.getGetGameTable();
     }
   },
   mounted() {
@@ -608,6 +617,56 @@ export default {
       this.$emit('getUserInfo', this.id);
     }, 15000)
     this.GetXZTime();
+    return false;
+    // var url = 'http://58.84.7.20:8081/vedio/1.mp4';  // url
+    // var mimeCodec = 'video/mp4; codecs="avc1.640028, mp4a.40.2"'; // 编码格式
+    // PostbirdMp4ToBlob.init('#j-video',url,mimeCodec); // 调用 #video 是选择器 id
+    if (window.MediaSource) {
+      const video = document.getElementById('j-video');
+      const mediaSource = new MediaSource();
+      video.src = window.URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener('sourceopen', sourceOpen);
+      // const videoSourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001e"');
+      // fetch("http://58.84.7.20:8081/vedio/1.mp4").then(function(response) {
+      //   // The data has to be a JavaScript ArrayBuffer
+      //   return response.arrayBuffer();
+      // }).then(function(videoData) {
+      //   videoSourceBuffer.appendBuffer(videoData);
+      //   video.play();
+      // });
+
+      function sourceOpen(e) {
+          URL.revokeObjectURL(video.src);
+          // 设置 媒体的编码类型
+          const mime = 'video/mp4; codecs="avc1.4d401f,mp4a.40.2"; profiles="isom,iso2,avc1,mp41"';
+          const mediaSource = e.target;
+          const sourceBuffer = mediaSource.addSourceBuffer(mime);
+          const videoUrl = 'http://58.84.7.20:8081/vedio/1.mp4';
+          // const videoUrl = 'http://58.84.7.20:8090/stream1.ts';
+          fetch(videoUrl).then(response => {
+            console.log(response)
+            return response.arrayBuffer();
+          }).then(videoData=> {
+            sourceBuffer.addEventListener('updateend', function(e) {
+              console.log(mediaSource.readyState, e)
+              // if(playRange < contentLength - 1) {
+              //     ajaxMediaGET("path-to-server", loadNextRange(playRange), true, undefined);
+              // } else {
+              //     sourceBuffer.addEventListener('updateend', function(){
+              //         mediaSource.endOfStream();
+              //     });
+              // }
+              if (!sourceBuffer.updating && mediaSource.readyState === 'open') {
+                  mediaSource.endOfStream();
+                  // 在数据请求完成后，我们需要调用 endOfStream()。它会改变 MediaSource.readyState 为 ended 并且触发 sourceended 事件。
+                  video.play()
+                  console.log('sss')
+              }
+            });
+            sourceBuffer.appendBuffer(videoData);
+          });
+      }
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -755,7 +814,7 @@ export default {
         tempGetJson.push(N + "|" + M);
       }
       tempGetJson = tempGetJson.toString();
-      // if (that.XzISOk) {
+      if (that.XzISOk) {
         if (that.gameAll && that.id) {
           Withdrawal().then(res => {
             if (res.Status && res.Code == 200) {
@@ -822,7 +881,7 @@ export default {
                   if (res.Status) {
                     Toast("下注成功！");
                     that.canleGame();
-                    that.getGetGameTable();
+
                     that.$emit("userInfoFn");
                   } else {
                     Toast(res.Log);
@@ -838,9 +897,9 @@ export default {
         } else {
           Toast("请选择下注！");
         }
-      // } else {
-      //   Toast("未到下注时间");
-      // }
+      } else {
+        Toast("未到下注时间");
+      }
     },
     allInFn() {
       this.isAllin = true;

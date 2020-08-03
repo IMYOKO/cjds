@@ -113,6 +113,18 @@
                   <option value="中国农业银行">中国农业银行</option>
                   <option value="中国工商银行">中国工商银行</option>
                   <option value="中国建设银行">中国建设银行</option>
+                  <option value="中国邮政银行">中国邮政银行</option>
+                  <option value="中国交通银行">中国交通银行</option>
+                  <option value="华夏银行">华夏银行</option>
+                  <option value="光大银行">光大银行</option>
+                  <option value="招商银行">招商银行</option>
+                  <option value="中信银行">中信银行</option>
+                  <option value="兴业银行">兴业银行</option>
+                  <option value="民生银行">民生银行</option>
+                  <option value="深圳发展银行">深圳发展银行</option>
+                  <option value="广东发展银行">广东发展银行</option>
+                  <option value="上海浦东发展银行">上海浦东发展银行</option>
+                  <option value="恒丰银行">恒丰银行</option>
                 </select>
               </td>
             </tr>
