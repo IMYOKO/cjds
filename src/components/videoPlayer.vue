@@ -1,6 +1,6 @@
 <template>
   <div class="video-player-wrapper">
-    <video-player :options="videoOptions" />
+    <video-player ref="video" :options="videoOptions" />
   </div>
 </template>
 
@@ -9,6 +9,10 @@ import VideoPlayer from "./videoJs";
 
 export default {
   name: "VideoExample",
+  props: {
+    width: Number,
+    height: Number,
+  },
   components: {
     VideoPlayer
   },
@@ -18,8 +22,8 @@ export default {
         autoplay: true,
         controls: false,
         muted: true,
-        width: 667,
-        height: 372,
+        width: this.width, // 667
+        height: this.height, // 372
         preload: 'auto',
         sources: [
           {
@@ -30,6 +34,12 @@ export default {
         techOrder: ["flash"]
       }
     };
+  },
+  mounted() {
+    this.$nextTick(()=>{
+      console.log(this.$refs.video)
+      // this.$refs.video.play()
+    })
   }
 };
 </script>

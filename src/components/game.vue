@@ -68,9 +68,15 @@
           </td>
           <td width="667" valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
-              <div class="xiazhu-time">{{kjdjs}}</div>
+              <div class="xiazhu-time">
+                <template v-if="timeData">
+                  <span v-if="nowTime < timeData.startBet">—</span>
+                  <span v-else-if="nowTime > timeData.endBet">—</span>
+                  <span class="kj" v-else>{{timeData.endBet - nowTime}}</span>
+                </template>
+              </div>
               <div class="hide-video" v-if="!value"></div>
-              <VuePlayer />
+              <VuePlayer :width="667" :height="372" />
               <!-- <video 
                 class="video"
                 id="j-video"
@@ -497,6 +503,40 @@
         <div class="ds-game-btn" @click="canleGame">取消</div>
       </div>
     </div>
+    <block v-if="false">
+      <ul class="test" v-if="timeData">
+        <li>
+          nowSystem: {{timeData.nowSystem}} 系统时间
+        </li>
+        <li>
+          open: {{timeData.open}} 最新摇骰子时间
+        </li>
+        <li>
+          ok: {{timeData.ok}} 二次确认时间
+        </li>
+        <li>
+          startBet: {{timeData.startBet}} 下次开注开始时间 
+        </li>
+        <li>
+          endBet: {{timeData.endBet}} 下次开注结束时间
+        </li>
+        <li>
+          nextDraw: {{timeData.nextDraw}} 下次开奖时间
+        </li>
+        <li>
+          系统时间更新: {{nowTime}}
+        </li>
+        <li>
+          startBet - nowTime: {{timeData.startBet - nowTime}}
+        </li>
+        <li>
+          endBet - nowTime: {{timeData.endBet - nowTime}}
+        </li>
+        <li>
+          nextDraw - nowTime: {{timeData.nextDraw - nowTime}}
+        </li>
+      </ul>
+    </block>
   </div>
 </template>
 
@@ -513,7 +553,8 @@ import {
   GetKJ,
   GetBankInfo,
   GetZNX,
-  GetXZTime
+  GetXZTime,
+  Kj
 } from "../common/api";
 import { fetchVideo } from "../common/http"
 import { Toast, Loadmore, Switch } from "mint-ui";
@@ -591,6 +632,10 @@ export default {
       timer: null,
       timer2: null,
       timer3: null,
+
+      timeData: null,
+      nowTime: null,
+      timesCurrent: null
     };
   },
   created() {
@@ -608,11 +653,13 @@ export default {
       this.$emit('getUserInfo', this.id);
     }, 15000)
     this.GetXZTime();
+    this.getKj()
   },
   beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.timer2);
     clearInterval(this.timer3);
+    clearTimeout(this.timer4)
   },
   methods: {
     async GetXZTime() {
@@ -755,7 +802,7 @@ export default {
         tempGetJson.push(N + "|" + M);
       }
       tempGetJson = tempGetJson.toString();
-      // if (that.XzISOk) {
+      if (this.timeData && this.nowTime >= this.timeData.startBet && this.nowTime <= this.timeData.endBet) {
         if (that.gameAll && that.id) {
           Withdrawal().then(res => {
             if (res.Status && res.Code == 200) {
@@ -838,9 +885,9 @@ export default {
         } else {
           Toast("请选择下注！");
         }
-      // } else {
-      //   Toast("未到下注时间");
-      // }
+      } else {
+        Toast("未到下注时间");
+      }
     },
     allInFn() {
       this.isAllin = true;
@@ -960,11 +1007,11 @@ export default {
       myVideo.pause();
     },
     turn() {
-      if (this.value) {
-        this.playVideo();
-      } else {
-        this.playStop();
-      }
+      // if (this.value) {
+      //   this.playVideo();
+      // } else {
+      //   this.playStop();
+      // }
     },
     toIndex() {
       this.$router.push("/");
@@ -1007,15 +1054,45 @@ export default {
       }
     },
     updateVideo() {
-      const video = document.getElementById("videoPlay");
-      if (video) {
-        const currentTime = video.currentTime
-        video.pause();
-        video.setAttribute('src', this.baseUrl + this.videoName);
-        video.load();
-        video.currentTime = currentTime;
-        video.play();
+      // const video = document.getElementById("videoPlay");
+      // if (video) {
+      //   const currentTime = video.currentTime
+      //   video.pause();
+      //   video.setAttribute('src', this.baseUrl + this.videoName);
+      //   video.load();
+      //   video.currentTime = currentTime;
+      //   video.play();
+      // }
+    },
+    async getKj () {
+      try {
+        const res = await Kj()
+        this.timeData = res
+        this.nowTime = res.nowSystem
+        this.timesCurrent = res.nextDraw - res.nowSystem
+        this.updateTimes();
+      } catch (error) {
+        console.log(error)
       }
+    },
+    updateTimes() {
+      this.timer4 = setTimeout(() => {
+        this.timesCurrent --
+        this.nowTime ++ 
+        if (this.timesCurrent === -1) {
+          clearTimeout(this.timer4)
+          this.clearKjTime()
+          this.getGetGameTable()
+          this.getKj()
+          return
+        }
+        this.updateTimes()
+      }, 1000)
+    },
+    clearKjTime() {
+      this.timeData = null
+      this.nowTime = null
+      this.timesCurrent = null
     }
   }
 };
@@ -1090,5 +1167,26 @@ export default {
   right: 10px;
   margin: 0;
   z-index: 20;
+
+  span {
+    display: block;
+    color: #bf0e0b;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 12px;
+
+    &.kj {
+      font-size: 28px;
+    }
+  }
+}
+
+.test {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #fff;
+  padding: 20px ;
 }
 </style>

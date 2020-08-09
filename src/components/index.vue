@@ -76,9 +76,10 @@
         </div>
       </div>
       <div class="ds-index-box-right">
-        <div id="ds-vd-box" class="ds-vd-box">
-          <video v-for="(vdata,vindex) in videoList" v-if="vdata.FileName==videoName" :key="vindex" controlslist="nodownload"
-                oncontextmenu="return false" :src="baseUrl+vdata.FileName" id="videoPlay" v-show="true" muted class="video" style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video>
+        <div id="ds-vd-box" class="ds-vd-box" :style="{height: '168px'}">
+          <VuePlayer :width="300" :height="168" />
+          <!-- <video v-for="(vdata,vindex) in videoList" v-if="vdata.FileName==videoName" :key="vindex" controlslist="nodownload"
+                oncontextmenu="return false" :src="baseUrl+vdata.FileName" id="videoPlay" v-show="true" muted class="video" style="width:100%; height:100%; object-fit: fill;">您的浏览器不支持 video 视屏播放。</video> -->
         </div>
         <!-- <div class="ds-vd-box" style="height: auto">
           <img src="../../static/ds/t1.jpg">
@@ -111,6 +112,7 @@
   import { GetGameTable,GetVedioTime,GetVedio,baseUrl,AddVedio,QSJ,GetKJ,GetPM } from "../common/api";
   import { Toast,Loadmore  } from 'mint-ui';
   import Cookies from 'js-cookie'
+  import VuePlayer from './videoPlayer'
   export default {
     name: 'index',
     data () {
@@ -132,14 +134,21 @@
         kjdjs:0,
         XzISOk:false,
         kjstatus:false,
-        timer: null
+        timer: null,
+        timer2: null
       }
+    },
+    components: {
+      VuePlayer
     },
     created() {
       var that =this;
       that.baseUrl = baseUrl();
-      that.GetVedio();//获取视频列表
+      // that.GetVedio();//获取视频列表
       that.getGetGameTable()
+      this.timer2 = setInterval(() => {
+        this.getGetGameTable()
+      }, 15000)
       that.GetPM()
     },
     methods: {
@@ -281,24 +290,25 @@
       this.timer = setInterval(()=>{
         this.$emit('getUserInfo', 0);
       }, 15000)
-      setInterval(() => {
-        var vdos = document.getElementById("videoPlay");
-        if(this.$route.path=='/'){
-          if (this.XZTime == parseInt(vdos.currentTime) || this.XZTime < parseInt(vdos.currentTime)){
-            console.log(this.XZTime,parseInt(vdos.currentTime),this.XzISOk)
-            this.countDown(parseInt(vdos.currentTime));
-            if(!this.kjstatus){
-              GetKJ().then(res=>{});
-              this.kjstatus = true;
-            }
-          }else {
-            this.kjstatus = false;
-          }
-        }
-      },1000)
+      // setInterval(() => {
+      //   var vdos = document.getElementById("videoPlay");
+      //   if(this.$route.path=='/'){
+      //     if (this.XZTime == parseInt(vdos.currentTime) || this.XZTime < parseInt(vdos.currentTime)){
+      //       console.log(this.XZTime,parseInt(vdos.currentTime),this.XzISOk)
+      //       this.countDown(parseInt(vdos.currentTime));
+      //       if(!this.kjstatus){
+      //         GetKJ().then(res=>{});
+      //         this.kjstatus = true;
+      //       }
+      //     }else {
+      //       this.kjstatus = false;
+      //     }
+      //   }
+      // },1000)
     },
     beforeDestroy() {
       clearInterval(this.timer);
+      clearInterval(this.timer2);
     },
   }
 </script>

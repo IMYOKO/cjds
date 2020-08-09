@@ -257,6 +257,22 @@ export const GetUserInfo = (data) => {
     return Vue.prototype.$post(_baseUrl + 'GetUserInfo', data)
 };
 
+/**
+ * getkj 获取开奖时间
+ * open 最新摇骰子时间
+ * ok 二次确认时间
+ * first 摇骰子第一个结果
+ * second 摇骰子第二个结果
+ * startBet 下次开注开始时间
+ * endBet 下次开注结束时间
+ * nextDraw 下次开奖时间
+ * palyTime 播放时长
+ * nowSystem 系统时间
+ */
+export const Kj = (data) => {
+    return Vue.prototype.$fetch(_baseUrl + 'getkj', data)
+};
+
 
 
 
