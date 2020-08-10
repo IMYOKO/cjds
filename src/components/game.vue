@@ -66,7 +66,7 @@
               </tr>
             </table>
           </td>
-          <td width="667" valign="top">
+          <td width="" valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
               <div class="xiazhu-time">
                 <template v-if="timeData">
@@ -107,7 +107,8 @@
               长江单双路单
             </div>
             <div class="contener-box ds-game-cont">
-              <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
+              <GameTable :kj_data="kj_data" />
+              <!-- <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td v-for="(itemlist, index) in kj_data" :key='index'>
                     <div
@@ -140,7 +141,7 @@
                     <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}0`"></div>
                   </td>
                 </tr>
-              </table>
+              </table> -->
             </div>
             <div class="ds-index-kj-bottom clear_box" style="height: 76px;">
               <div class="float_left ds-game-bottom-text">单17/30</div>
@@ -561,11 +562,13 @@ import { Toast, Loadmore, Switch } from "mint-ui";
 import Cookies from "js-cookie";
 // import VuePlayer from './v-player'
 import VuePlayer from './videoPlayer'
+import GameTable from './gameTable'
 export default {
   name: "game",
   props: ["banlance"],
   components: {
-    VuePlayer
+    VuePlayer,
+    GameTable
   },
   data() {
     return {
@@ -695,19 +698,31 @@ export default {
       GetGameTable().then(res => {
         console.log(res);
         if (res.Status && res.Code == 200) {
-          var tempList = [];
-          for (var i = 0; i < res.Data.List.length; i++) {
-            if (res.Data.List[i].num.length > 0 && res.Data.List[i].num[0]) {
-              tempList.unshift(res.Data.List[i]);
-            } else {
-              tempList.push(res.Data.List[i]);
-            }
-          }
-          tempList.map(({num}) => {
-            num = this.$_.reverse(num)
+          const tempList = [];
+          // for (var i = 0; i < res.Data.List.length; i++) {
+          //   if (res.Data.List[i].num.length > 0 && res.Data.List[i].num[0]) {
+          //     tempList.unshift(res.Data.List[i]);
+          //   } else {
+          //     tempList.push(res.Data.List[i]);
+          //   }
+          // }
+          // tempList.map(({num}) => {
+          //   num = this.$_.reverse(num)
+          // })
+          const list = res.Data.list;
+          list.map(item => {
+            const arritem = []
+            item.map((i, eq) => {
+              if (eq <= 5) {
+                const a = i
+                a.push((i[0] + i[1])%2)
+                arritem.push(a)
+              }
+            })
+            tempList.push(arritem)
           })
           this.kj_data = tempList;
-          this.kj_top_info = res.Data.GameTableList;
+          this.kj_top_info = res.Data.game;
           if (this.kj_top_info.length > 0) {
             if (this.id == 1) {
               this.xzlimt = this.kj_top_info[0];
@@ -1067,9 +1082,12 @@ export default {
     async getKj () {
       try {
         const res = await Kj()
-        this.timeData = res
-        this.nowTime = res.nowSystem
-        this.timesCurrent = res.nextDraw - res.nowSystem
+        if(res.Data.playTime === 0) {
+          return
+        }
+        this.timeData = res.Data
+        this.nowTime = res.Data.nowSystem
+        this.timesCurrent = res.Data.nextDraw - res.Data.nowSystem
         this.updateTimes();
       } catch (error) {
         console.log(error)

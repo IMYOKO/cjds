@@ -12,8 +12,9 @@
             </div>
 
             <div class="contener-box">
+              <GameTable :kj_data="kj_data" />
 
-              <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
+              <!-- <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td v-for="(itemlist,index) in kj_data" :key="index">
                     <div v-if="itemlist.num[0]" v-for="(kjlist,kjindex) in itemlist.num"
@@ -28,7 +29,7 @@
                     <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="nonelist"></div>
                   </td>
                 </tr>
-              </table>
+              </table> -->
 
             </div>
 
@@ -47,8 +48,9 @@
             </div>
 
             <div class="contener-box">
+              <GameTable :kj_data="kj_data" />
 
-              <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
+              <!-- <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td v-for="(itemlist,index) in kj_data" :key="index">
                     <div v-if="itemlist.num[0]" v-for='(kjlist,kjindex) in itemlist.num'
@@ -63,7 +65,7 @@
                     <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}nonelist`"></div>
                   </td>
                 </tr>
-              </table>
+              </table> -->
 
             </div>
 
@@ -113,6 +115,7 @@
   import { Toast,Loadmore  } from 'mint-ui';
   import Cookies from 'js-cookie'
   import VuePlayer from './videoPlayer'
+  import GameTable from './gameTable'
   export default {
     name: 'index',
     data () {
@@ -139,7 +142,8 @@
       }
     },
     components: {
-      VuePlayer
+      VuePlayer,
+      GameTable
     },
     created() {
       var that =this;
@@ -166,17 +170,28 @@
       getGetGameTable(){
         GetGameTable().then(res=>{
           if(res.Status && res.Code==200){
-            var tempList = []
-            for(var i = 0; i<res.Data.List.length; i++){
-              if(res.Data.List[i].num.length>0 && res.Data.List[i].num[0]){
-                tempList.unshift(res.Data.List[i])
-              }else {
-                tempList.push(res.Data.List[i])
-              }
-            }
-            console.log(tempList)
+            const tempList = []
+            // for(var i = 0; i<res.Data.List.length; i++){
+            //   if(res.Data.List[i].num.length>0 && res.Data.List[i].num[0]){
+            //     tempList.unshift(res.Data.List[i])
+            //   }else {
+            //     tempList.push(res.Data.List[i])
+            //   }
+            // }
+            const list = res.Data.list;
+            list.map(item => {
+              const arritem = []
+              item.map((i, eq) => {
+                if (eq <= 5) {
+                  const a = i
+                  a.push((i[0] + i[1])%2)
+                  arritem.push(a)
+                }
+              })
+              tempList.push(arritem)
+            })
             this.kj_data = tempList;
-            this.kj_top_info = res.Data.GameTableList;
+            this.kj_top_info = res.Data.game;
           }else {
             Toast(res.Log);
           }

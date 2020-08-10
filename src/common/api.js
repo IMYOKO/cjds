@@ -41,8 +41,11 @@ export const loginApi = function (json) {
 // List（游戏记录集合 20个数组）
 // Num：开奖号码
 // DS：单双类型
+// export const GetGameTable = function () {
+//     return Vue.prototype.$post(_baseUrl + 'GetGameTable')
+// };
 export const GetGameTable = function () {
-    return Vue.prototype.$post(_baseUrl + 'GetGameTable')
+    return Vue.prototype.$fetch(_baseUrl + 'GetGameTable')
 };
 
 // Withdrawal(提现信息) -1
