@@ -3,10 +3,10 @@
     <div class="ds-index-box">
       <table class="ds-game-top-left" cellspacing="0" cellpadding="0" width="100%">
         <tr>
-          <td width="280" valign="top">
+          <td width="" valign="top">
             <table cellpadding="0" cellspacing="0" width="100%">
               <tr>
-                <td width=''>桌台信息:</td>
+                <td width='250'>桌台信息:</td>
                 <td v-if="id == 1">{{ kj_top_info[0] ? kj_top_info[0].TableName : "" }}</td>
                 <td v-if="id == 2">{{ kj_top_info[1] ? kj_top_info[1].TableName : "" }}</td>
               </tr>
@@ -66,7 +66,7 @@
               </tr>
             </table>
           </td>
-          <td width="" valign="top">
+          <td width="667" valign="top">
             <div style="width: 100%; height: 372px; position: relative;">
               <div class="xiazhu-time">
                 <template v-if="timeData">
@@ -103,45 +103,31 @@
             </div>
           </td>
           <td width="" valign="top">
+            <div class="ds-game-box">
+              <div class="ds-game-title clear_box">
+                长江单双路单
+              </div>
+              <div class="contener-box ds-game-cont">
+                <GameTable :kj_data="kj_data" />
+              </div>
+              <div class="ds-index-kj-bottom clear_box" style="height: 76px;">
+                <div class="float_left ds-game-bottom-text">单17/30</div>
+                <div class="float_left ds-game-bottom-text">双17/30</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="ds-index-box table-box">
+      <table class="ds-game-top-left" cellspacing="0" cellpadding="0" width="100%">
+        <tr>
+          <td width="" valign="top">
             <div class="ds-game-title clear_box">
               长江单双路单
             </div>
             <div class="contener-box ds-game-cont">
               <GameTable :kj_data="kj_data" />
-              <!-- <table class="ds-index-kj-qs-tb" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td v-for="(itemlist, index) in kj_data" :key='index'>
-                    <div
-                      v-if="itemlist.num[0]"
-                      :key='`${kjindex}s`'
-                      v-for="(kjlist, kjindex) in itemlist.num"
-                      :class="kjindex >= 6 ? 'ds-index-kj-po clear_bor' : ''"
-                      :style="
-                        kjindex >= 6
-                          ? 'left:' +
-                            leftPo * (itemlist.num.length - kjindex) +
-                            'px'
-                          : ''
-                      "
-                    >
-                      <span
-                        v-if="kjindex < 6"
-                        :class="itemlist.DS ? 'bg-bf0d0b' : 'bg-0544b8'"
-                      >{{ kjlist }}</span>
-                      <span
-                        v-if="kjindex >= 6"
-                        :class="itemlist.DS ? 'bg-bf0d0b' : 'bg-0544b8'"
-                      >{{ kjlist }}</span>
-                    </div>
-                    <div
-                      v-if="itemlist.num[0] && itemlist.num.length < 6"
-                      v-for="nonelist in Math.abs(6 - itemlist.num.length)"
-                      :key="`${nonelist}1`"
-                    ></div>
-                    <div v-if="!itemlist.num[0]" v-for="nonelist in 6" :key="`${nonelist}0`"></div>
-                  </td>
-                </tr>
-              </table> -->
             </div>
             <div class="ds-index-kj-bottom clear_box" style="height: 76px;">
               <div class="float_left ds-game-bottom-text">单17/30</div>
@@ -699,26 +685,23 @@ export default {
         console.log(res);
         if (res.Status && res.Code == 200) {
           const tempList = [];
-          // for (var i = 0; i < res.Data.List.length; i++) {
-          //   if (res.Data.List[i].num.length > 0 && res.Data.List[i].num[0]) {
-          //     tempList.unshift(res.Data.List[i]);
-          //   } else {
-          //     tempList.push(res.Data.List[i]);
-          //   }
-          // }
-          // tempList.map(({num}) => {
-          //   num = this.$_.reverse(num)
-          // })
-          const list = res.Data.list;
+          const list = res.Data.list.reverse();
           list.map(item => {
             const arritem = []
-            item.map((i, eq) => {
-              if (eq <= 5) {
+            item.reverse().map((i, eq) => {
+              if (i[0] > 0) {
                 const a = i
                 a.push((i[0] + i[1])%2)
                 arritem.push(a)
               }
             })
+            if (arritem.length < 6) {
+              for(let i = 0; i < 6; i++) {
+                if(!arritem[i]) {
+                  arritem.push([0, 0])
+                }
+              }
+            }
             tempList.push(arritem)
           })
           this.kj_data = tempList;
@@ -1087,7 +1070,7 @@ export default {
         }
         this.timeData = res.Data
         this.nowTime = res.Data.nowSystem
-        this.timesCurrent = res.Data.nextDraw - res.Data.nowSystem
+        this.timesCurrent = res.Data.nextDraw - res.Data.nowSystem + 2
         this.updateTimes();
       } catch (error) {
         console.log(error)
@@ -1097,10 +1080,12 @@ export default {
       this.timer4 = setTimeout(() => {
         this.timesCurrent --
         this.nowTime ++ 
-        if (this.timesCurrent === -1) {
+        if(this.nowTime === this.timeData.startBet) {
+          this.getGetGameTable()
+        }
+        if (this.timesCurrent === 0) {
           clearTimeout(this.timer4)
           this.clearKjTime()
-          this.getGetGameTable()
           this.getKj()
           return
         }
@@ -1206,5 +1191,18 @@ export default {
   font-size: 14px;
   color: #fff;
   padding: 20px ;
+}
+
+.ds-game-box {
+    display: none;
+}
+
+@media only screen and (min-width: 1600px) {
+    .ds-game-box {
+      display: block;
+    }
+    .table-box {
+      display: none;
+    }
 }
 </style>

@@ -171,23 +171,23 @@
         GetGameTable().then(res=>{
           if(res.Status && res.Code==200){
             const tempList = []
-            // for(var i = 0; i<res.Data.List.length; i++){
-            //   if(res.Data.List[i].num.length>0 && res.Data.List[i].num[0]){
-            //     tempList.unshift(res.Data.List[i])
-            //   }else {
-            //     tempList.push(res.Data.List[i])
-            //   }
-            // }
-            const list = res.Data.list;
+            const list = res.Data.list.reverse();
             list.map(item => {
               const arritem = []
-              item.map((i, eq) => {
-                if (eq <= 5) {
+              item.reverse().map((i, eq) => {
+                if (i[0] > 0) {
                   const a = i
                   a.push((i[0] + i[1])%2)
                   arritem.push(a)
                 }
               })
+              if (arritem.length < 6) {
+                for(let i = 0; i < 6; i++) {
+                  if(!arritem[i]) {
+                    arritem.push([0, 0])
+                  }
+                }
+              }
               tempList.push(arritem)
             })
             this.kj_data = tempList;
