@@ -28,8 +28,9 @@
               <el-table-column prop="SY" label="输赢"></el-table-column>
               <el-table-column prop="Status" label="操作">
                 <template slot-scope="scope">
-                  <span class="caozuo" @click="revoke(scope.row)" v-if="scope.row.Status === 0">撤单</span>
-                  <span @click="revoke(scope.row)" v-if="scope.row.Status === 2">已撤单</span>
+                  <!-- <span class="caozuo" @click="revoke(scope.row)" v-if="scope.row.Status === 0">撤单</span> -->
+                  <span v-if="scope.row.Status === 1">已开奖</span>
+                  <!-- <span v-if="scope.row.Status === 2">已撤单</span> -->
                 </template>
               </el-table-column>
             </el-table>
