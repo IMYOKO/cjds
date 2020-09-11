@@ -54,6 +54,7 @@
         </div>
         <div class="float_right">
           <ul class="ds-right-nav-icon">
+            <li class="ds-right-nav-icon-get ds-icon-top-2" title="代理" @click="showtProxyUser(true)"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-1" :title="`${soundMute === true? '开启声音': '关闭声音'}`" @click="setSound"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-2" title="会员消息" @click="showtVipMessage"></li>
             <li class="ds-right-nav-icon-get ds-icon-top-3" title="电话"></li>
@@ -97,6 +98,7 @@
       <!--history-->
       <history @historyShow="toshowhistory" :historyShow="historyShows" :historyArr="hArr"></history>
       <VipMessage ref="vipMessage"/>
+      <ProxyUser ref="proxyUser" v-if="proxyUserVisible" :userId="userId" @showtProxyUser="showtProxyUser" />
     </div>
   </div>
 </template>
@@ -109,6 +111,7 @@ import popularize from "@/components/popularize";
 import withdrawal from "@/components/withdrawal";
 import history from "@/components/history";
 import VipMessage from "@/components/vip-message";
+import ProxyUser from "@/components/proxyUser";
 import { Toast, Actionsheet, Loadmore } from "mint-ui";
 import { Withdrawal, GetOrder, GetGG, GetUserInfo } from "./common/api";
 import Cookies from "js-cookie";
@@ -122,7 +125,8 @@ export default {
     about,
     withdrawal,
     history,
-    VipMessage
+    VipMessage,
+    ProxyUser
   },
   data() {
     return {
@@ -141,6 +145,8 @@ export default {
       soundMute: localStorage.getItem(SoundType.bgm) === CLOSED ? true : false,
       banlance: 0,
       timer: null,
+      userId: '',
+      proxyUserVisible: false
     };
   },
   created() {
@@ -156,6 +162,7 @@ export default {
       const res = await GetUserInfo({tableId: id});
       if (res && res.Code === 200 && res.Status === true) {
         this.banlance = res.Data.Banlance
+        this.userId = res.Data.Id
         if (res.Data.IsFrozen) {
           Toast("账户被冻结！");
           Cookies.set("token", "");
@@ -298,6 +305,9 @@ export default {
     },
     showtVipMessage() {
       this.$refs.vipMessage.updateModal(true);
+    },
+    showtProxyUser(flag) {
+      this.proxyUserVisible = flag
     }
   },
   watch: {

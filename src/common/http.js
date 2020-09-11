@@ -80,9 +80,10 @@ export function fetch(url, params = {}) {
                     if (response.data.code === 200) {
                         //返回成功处理  这里传的啥 后续调用的时候 res就是啥
                         resolve(response.data.data);//我们后台所有数据都是放在返回的data里所以这里统一处理了
-                    } else {
-                        //错误处理
+                    } else if (response.data.Status === true) {
                         resolve(response.data);
+                    } else {
+                        reject(response.data);
                     }
                     Indicator.close();
                 })
@@ -126,10 +127,14 @@ export function post(url, data, login, upload = {}, indicators) {
                 }
             })
                 .then(response => {
+                    console.log('response.data')
+                    console.log(response.data, response.data.code)
                     if (response.data.code === 200) {
                         resolve(response.data.data);
-                    } else {
+                    } else if (response.data.Status === true) {
                         resolve(response.data);
+                    } else {
+                        reject(response.data);
                     }
                     Indicator.close();
                 }, err => {

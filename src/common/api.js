@@ -285,6 +285,29 @@ export const getPrizeNo = () => {
 }
 
 
+/**
+ * JoinProxy 用户加入分红代理
+ */
+export const joinProxy = (data) => {
+    return Vue.prototype.$post(`${_baseUrl}/joinproxy`, data);
+}
+
+
+/**
+ * getProxy 获取代理信息
+ */
+export const getProxy = (proxyId) => {
+    return Vue.prototype.$fetch(`${_baseUrl}/GetProxy?proxyId=${proxyId}`, {});
+}
+
+
+/**
+ * GetSubUser 获取我的会员
+ */
+export const getSubUser = (proxyId, page, rows) => {
+    return Vue.prototype.$fetch(`${_baseUrl}/getsubuser?proxyId=${proxyId}&page=${page}&rows=${rows}`, {});
+}
+
 
 
 
