@@ -8,6 +8,7 @@ Vue.prototype.$del = del;
 
 //APIURL--测试
 const _baseUrl = 'http://58.84.7.20:8081/api/';
+const _proxyUserURL = 'http://58.84.7.20:8081/proxyuser/';
 const _imgUrl = 'http://api.twnongchang.cn/';
 
 // const _baseUrl='http://api.twnongchang.com/CTLAllAPI/';
@@ -275,6 +276,13 @@ export const GetUserInfo = (data) => {
 export const Kj = (data) => {
     return Vue.prototype.$fetch(_baseUrl + 'getkj', data)
 };
+
+/**
+ * GetPrizeNo 获取期号
+ */
+export const getPrizeNo = () => {
+    return Vue.prototype.$fetch(_proxyUserURL + 'GetPrizeNo', {});
+}
 
 
 

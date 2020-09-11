@@ -493,25 +493,37 @@
     <block v-if="false">
       <ul class="test" v-if="timeData">
         <li>
-          nowSystem: {{timeData.nowSystem}} 系统时间
+          nowSystem: {{timeData.nowSystem}} 服务器时间
         </li>
         <li>
-          open: {{timeData.open}} 最新摇骰子时间
+          above_ok: {{timeData.above_ok}} 上次二次确认时间 
         </li>
         <li>
-          ok: {{timeData.ok}} 二次确认时间
+          above_first: {{timeData.above_first}} 上一次开奖了第一个号码 
         </li>
         <li>
-          startBet: {{timeData.startBet}} 下次开注开始时间 
+          above_second: {{timeData.above_second}} 上一次开奖了第二个号码 
         </li>
         <li>
-          endBet: {{timeData.endBet}} 下次开注结束时间
+          no: {{timeData.no}} 当前期号 
         </li>
         <li>
-          nextDraw: {{timeData.nextDraw}} 下次开奖时间
+          startBet: {{timeData.startBet}} 未开奖，当前准备下注时间,默认等于上次确认时间 
+        </li>
+        <li>
+          endBet: {{timeData.endBet}} 未开奖，当前结束下注时间,默认等于当前摇骰时间
+        </li>
+        <li>
+          open: {{timeData.open}} 当前摇骰时间
+        </li>
+        <li>
+          ok: {{timeData.ok}} 当前二次确认时间
         </li>
         <li>
           系统时间更新: {{nowTime}}
+        </li>
+        <li>
+          dll视频插放时长: {{playTime}}
         </li>
         <li>
           startBet - nowTime: {{timeData.startBet - nowTime}}
@@ -520,7 +532,7 @@
           endBet - nowTime: {{timeData.endBet - nowTime}}
         </li>
         <li>
-          nextDraw - nowTime: {{timeData.nextDraw - nowTime}}
+          ok - nowTime: {{timeData.ok - nowTime}}
         </li>
       </ul>
     </block>
@@ -541,7 +553,8 @@ import {
   GetBankInfo,
   GetZNX,
   GetXZTime,
-  Kj
+  Kj,
+  getPrizeNo
 } from "../common/api";
 import { fetchVideo } from "../common/http"
 import { Toast, Loadmore, Switch } from "mint-ui";
@@ -801,6 +814,9 @@ export default {
       }
       tempGetJson = tempGetJson.toString();
       if (this.timeData && this.nowTime >= this.timeData.startBet && this.nowTime <= this.timeData.endBet) {
+        if (this.timeData && this.timeData.no === '') {
+          return
+        }
         if (that.gameAll && that.id) {
           Withdrawal().then(res => {
             if (res.Status && res.Code == 200) {
@@ -856,23 +872,29 @@ export default {
                   }
                 }
 
-                var getJson = {
-                  GameTableId: that.id,
-                  PlayType: tempGetJson,
-                  Money: that.gameAll
-                };
-                console.log(getJson, "getJson");
-                AddOrder(getJson).then(res => {
-                  console.log(res);
-                  if (res.Status) {
-                    Toast("下注成功！");
-                    that.canleGame();
-                    that.getGetGameTable();
-                    that.$emit("userInfoFn");
-                  } else {
-                    Toast(res.Log);
-                  }
-                });
+                getPrizeNo().then((qsRes)=>{
+                  const QS = qsRes.Data
+                  console.log(QS)
+                  var getJson = {
+                    GameTableId: that.id,
+                    PlayType: tempGetJson,
+                    Money: that.gameAll,
+                    QS
+                  };
+                  console.log(getJson, "getJson");
+                  AddOrder(getJson).then(res => {
+                    console.log(res);
+                    if (res.Status) {
+                      Toast("下注成功！");
+                      that.canleGame();
+                      that.getGetGameTable();
+                      that.$emit("userInfoFn");
+                    } else {
+                      Toast(res.Log);
+                    }
+                  });
+                })
+
               } else {
                 Toast("下注金额不能大于现有金额！");
               }
@@ -1062,6 +1084,14 @@ export default {
       //   video.play();
       // }
     },
+    async getPrizeNo () {
+      try {
+        const QS = await getPrizeNo()
+        return Promise.resolve(QS)
+      } catch (error) {
+        return Promise.reject(error)
+      }
+    },
     async getKj () {
       try {
         const res = await Kj()
@@ -1070,7 +1100,7 @@ export default {
         }
         this.timeData = res.Data
         this.nowTime = res.Data.nowSystem
-        this.timesCurrent = res.Data.nextDraw - res.Data.nowSystem + 2
+        this.timesCurrent = res.Data.ok - res.Data.nowSystem + 2
         this.updateTimes();
       } catch (error) {
         console.log(error)
@@ -1080,12 +1110,13 @@ export default {
       this.timer4 = setTimeout(() => {
         this.timesCurrent --
         this.nowTime ++ 
-        if(this.nowTime === this.timeData.startBet) {
-          this.getGetGameTable()
-        }
+        // if(this.nowTime === this.timeData.startBet) {
+        //   this.getGetGameTable()
+        // }
         if (this.timesCurrent === 0) {
           clearTimeout(this.timer4)
           this.clearKjTime()
+          this.getGetGameTable()
           this.getKj()
           return
         }
