@@ -281,7 +281,7 @@ export const Kj = (data) => {
  * GetPrizeNo 获取期号
  */
 export const getPrizeNo = () => {
-    return Vue.prototype.$fetch(_proxyUserURL + 'GetPrizeNo', {});
+    return Vue.prototype.$fetch(_baseUrl + 'GetPrizeNo', {});
 }
 
 
